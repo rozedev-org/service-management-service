@@ -1,6 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  IsArray,
   IsEnum,
   IsInt,
   IsOptional,
@@ -17,8 +16,7 @@ export enum Order {
 }
 
 export class PageDto<T> {
-  @IsArray()
-  @ApiProperty({ isArray: true })
+  @ApiProperty()
   readonly data: T[];
 
   @ApiProperty({ type: () => PageMetaDto })

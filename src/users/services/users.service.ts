@@ -4,6 +4,7 @@ import { Prisma, User } from '@prisma/client';
 import { GetUsersDto } from '../dtos/users.dto';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
+import { PageDto } from '@common/dtos/page.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,11 +17,10 @@ export class UsersService {
     if (!userData) {
       throw new NotFoundException(`User ${id} not found`);
     }
-
     return userData;
   }
 
-  async users(params: GetUsersDto) {
+  async users(params: GetUsersDto): Promise<PageDto<User>> {
     const { skip, take } = params;
     const itemCount = await this.prisma.user.count();
     const data = await this.prisma.user.findMany({
@@ -30,10 +30,9 @@ export class UsersService {
 
     const pageMetaDto = new PageMetaDto({
       itemCount,
-      pageOptionsDto: {
-        ...params
-      }
+      pageOptionsDto: params
     });
+
     return {
       data,
       meta: pageMetaDto
