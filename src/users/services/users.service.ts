@@ -39,9 +39,31 @@ export class UsersService {
     };
   }
 
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+  async create(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({
       data
+    });
+  }
+
+  async update(
+    params: FindByIdDto,
+    data: Prisma.UserUpdateInput
+  ): Promise<User> {
+    const { id } = params;
+
+    await this.user({ id });
+
+    return this.prisma.user.update({
+      where: { id },
+      data
+    });
+  }
+
+  async remove({ id }: FindByIdDto): Promise<User> {
+    await this.user({ id });
+
+    return this.prisma.user.delete({
+      where: { id }
     });
   }
 }

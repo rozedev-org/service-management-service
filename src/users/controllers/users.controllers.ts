@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { UsersService } from '../services/users.service';
-import { CreateUserDto, GetUsersDto } from '../dtos/users.dto';
+import { CreateUserDto, GetUsersDto, UpdateUserDto } from '../dtos/users.dto';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { ApiPaginatedResponse } from '@common/decorators/ApiPaginatedResponse';
 import { UserEntity } from '../entities/user.entity';
@@ -24,7 +33,17 @@ export class UsersController {
   }
 
   @Post()
-  async signupUser(@Body() userData: CreateUserDto): Promise<User> {
-    return this.usersService.createUser(userData);
+  async signupUser(@Body() payload: CreateUserDto): Promise<User> {
+    return this.usersService.create(payload);
+  }
+
+  @Put(':id')
+  update(@Param() params: FindByIdDto, @Body() payload: UpdateUserDto) {
+    return this.usersService.update(params, payload);
+  }
+
+  @Delete(':id')
+  remove(@Param() params: FindByIdDto) {
+    return this.usersService.remove(params);
   }
 }
