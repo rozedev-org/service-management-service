@@ -1,16 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { Requirement } from '@prisma/client';
 
-export class UserEntity implements User {
+export class RequirementsEntity implements Requirement {
   @ApiProperty()
   id: number;
-  userName: string;
   @ApiProperty()
-  firstName: string;
+  title: string;
   @ApiProperty()
-  lastName: string;
-  @ApiProperty()
-  password: string;
+  userId: number;
   @ApiProperty()
   createdAt: Date;
   @ApiProperty()

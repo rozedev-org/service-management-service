@@ -33,17 +33,14 @@ $ npm run test:cov
 ## Migrations
 
 ```bash
-# Generate Migration for windows
-$ npm run migrations-win:generate --migration_name=migration-name
+# Generate Migration and/or run migrations
+$ npm run migrations:generate
 
-# Generate Migration for linux
-$ npm run migrations:generate --migration_name=migration-name
+# Sync to refresh db structure in code
+$ npm run migrations:sync
 
-# Run migrations
-$ npm run migrations:run
 
-# Revert migration
-$ npm run migrations:revert
+
 ```
 
 ```bash
