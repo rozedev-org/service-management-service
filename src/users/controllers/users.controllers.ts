@@ -8,7 +8,7 @@ import {
   Put,
   Query
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto, GetUsersDto, UpdateUserDto } from '../dtos/users.dto';
@@ -22,6 +22,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(':id')
+  @ApiOkResponse({ type: UserEntity })
   getUser(@Param() params: FindByIdDto): Promise<User> {
     return this.usersService.user(params);
   }
@@ -33,16 +34,19 @@ export class UsersController {
   }
 
   @Post()
+  @ApiOkResponse({ type: UserEntity })
   async signupUser(@Body() payload: CreateUserDto): Promise<User> {
     return this.usersService.create(payload);
   }
 
   @Put(':id')
+  @ApiOkResponse({ type: UserEntity })
   update(@Param() params: FindByIdDto, @Body() payload: UpdateUserDto) {
     return this.usersService.update(params, payload);
   }
 
   @Delete(':id')
+  @ApiOkResponse({ type: UserEntity })
   remove(@Param() params: FindByIdDto) {
     return this.usersService.remove(params);
   }

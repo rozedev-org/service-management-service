@@ -9,7 +9,7 @@ import {
   Query
 } from '@nestjs/common';
 import { RequirementsService } from '../services/requirements.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { Requirement } from '@prisma/client';
 import { PageDto } from '@common/dtos/page.dto';
@@ -27,6 +27,7 @@ export class RequirementsController {
   constructor(private readonly requirementsService: RequirementsService) {}
 
   @Get(':id')
+  @ApiOkResponse({ type: RequirementsEntity })
   getUser(@Param() params: FindByIdDto): Promise<Requirement> {
     return this.requirementsService.requirement(params);
   }
@@ -40,6 +41,7 @@ export class RequirementsController {
   }
 
   @Post()
+  @ApiOkResponse({ type: RequirementsEntity })
   async signupUser(
     @Body() payload: CreateRequirementsDto
   ): Promise<Requirement> {
@@ -47,11 +49,13 @@ export class RequirementsController {
   }
 
   @Put(':id')
+  @ApiOkResponse({ type: RequirementsEntity })
   update(@Param() params: FindByIdDto, @Body() payload: UpdateRequirementsDto) {
     return this.requirementsService.update(params, payload);
   }
 
   @Delete(':id')
+  @ApiOkResponse({ type: RequirementsEntity })
   remove(@Param() params: FindByIdDto) {
     return this.requirementsService.remove(params);
   }
