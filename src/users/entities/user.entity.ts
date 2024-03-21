@@ -4,6 +4,7 @@ import { User } from '@prisma/client';
 export class UserEntity implements User {
   @ApiProperty()
   id: number;
+  @ApiProperty()
   userName: string;
   @ApiProperty()
   firstName: string;
