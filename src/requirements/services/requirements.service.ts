@@ -20,7 +20,10 @@ export class RequirementsService {
 
   async requirement({ id }: FindByIdDto): Promise<Requirement> {
     const requirementData = await this.prisma.requirement.findUnique({
-      where: { id }
+      where: { id },
+      include: {
+        user: true
+      }
     });
     if (!requirementData) {
       throw new NotFoundException(`Requirement ${id} not found`);
@@ -35,7 +38,10 @@ export class RequirementsService {
     const itemCount = await this.prisma.requirement.count();
     const data = await this.prisma.requirement.findMany({
       skip,
-      take
+      take,
+      include: {
+        user: true
+      }
     });
 
     const pageMetaDto = new PageMetaDto({
