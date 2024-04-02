@@ -8,7 +8,7 @@ export class CreateRequirementsDto {
   @ApiProperty()
   @IsNumber()
   @IsOptional()
-  userId: number;
+  userId: number | null;
 
   @ApiProperty()
   @IsString()
