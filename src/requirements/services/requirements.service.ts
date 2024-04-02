@@ -68,6 +68,8 @@ export class RequirementsService {
   ): Promise<Requirement> {
     const { id } = params;
 
+    data.userId && (await this.userService.user({ id: data.userId }));
+
     await this.requirement({ id });
     return this.prisma.requirement.update({
       where: { id },
