@@ -1,17 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Requirement } from '@prisma/client';
+import { RequirementState } from '@prisma/client';
 
-export class RequirementsEntity implements Requirement {
+export class ReqStateEntity implements RequirementState {
   @ApiProperty()
   id: number;
   @ApiProperty()
   title: string;
   @ApiProperty()
-  userId: number;
+  secuence: number;
   @ApiProperty()
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;
-  @ApiProperty()
-  stateId: number;
 }

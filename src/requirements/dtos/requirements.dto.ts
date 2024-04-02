@@ -13,6 +13,10 @@ export class CreateRequirementsDto {
   @ApiProperty()
   @IsString()
   title: string;
+
+  @ApiProperty()
+  @IsNumber()
+  stateId: number;
 }
 
 export class UpdateRequirementsDto extends PartialType(CreateRequirementsDto) {}

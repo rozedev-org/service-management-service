@@ -5,13 +5,9 @@ import { PrismaClient } from '@prisma/client';
 export class PrismaService extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
-    const defaultState = await this.requirementState.findUnique({
-      where: {
-        id: 1
-      }
-    });
+    const defaultState = await this.requirementState.findMany({});
 
-    if (!defaultState) {
+    if (!defaultState.length) {
       await this.requirementState.create({
         data: {
           title: 'To do',
