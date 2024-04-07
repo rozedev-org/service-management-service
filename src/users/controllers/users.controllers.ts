@@ -6,7 +6,8 @@ import {
   Param,
   Post,
   Put,
-  Query
+  Query,
+  UseGuards
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
@@ -16,7 +17,9 @@ import { FindByIdDto } from '@app/dtos/generic.dto';
 import { ApiPaginatedResponse } from '@common/decorators/ApiPaginatedResponse';
 import { UserEntity } from '../entities/user.entity';
 import { PageDto } from '@common/dtos/page.dto';
+import { JwtAuthGuard } from '@app/auth/guards/jwt-authentication.guard';
 @ApiTags('Users')
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
