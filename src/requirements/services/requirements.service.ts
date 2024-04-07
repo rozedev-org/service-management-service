@@ -10,6 +10,7 @@ import {
 import { PageDto } from '@common/dtos/page.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { UsersService } from '@app/users/services/users.service';
+import { ReqActionsEntity } from '../entities/requirements.entity';
 
 @Injectable()
 export class RequirementsService {
@@ -82,5 +83,26 @@ export class RequirementsService {
     return this.prisma.requirement.delete({
       where: { id }
     });
+  }
+
+  async getReqActions(params: FindByIdDto): Promise<ReqActionsEntity> {
+    const req = await this.requirement(params);
+
+    const reqStates = await this.prisma.requirementState.findMany({
+      orderBy: {
+        secuence: 'asc'
+      }
+    });
+
+    const currenState = reqStates.find((state) => state.id === req.stateId);
+
+    const remainingStates = reqStates.filter(
+      (state) => state.id !== currenState.id
+    );
+
+    return {
+      current: currenState,
+      remaining: remainingStates
+    };
   }
 }

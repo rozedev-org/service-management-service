@@ -25,10 +25,21 @@ model User {
 }
 
 model Requirement {
-  id        Int      @id @default(autoincrement())
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    Int?     @map("user_id")
-  title     String   @default("")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id        Int              @id @default(autoincrement())
+  user      User?            @relation(fields: [userId], references: [id])
+  userId    Int?             @map("user_id")
+  state     RequirementState @relation(fields: [stateId], references: [id])
+  stateId   Int              @map("state_id")
+  title     String           @default("")
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+}
+
+model RequirementState {
+  id          Int           @id @default(autoincrement())
+  title       String
+  secuence    Int
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  Requirement Requirement[]
 }
