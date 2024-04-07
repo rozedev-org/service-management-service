@@ -19,7 +19,10 @@ import {
   UpdateRequirementsDto
 } from '../dtos/requirements.dto';
 import { ApiPaginatedResponse } from '@common/decorators/ApiPaginatedResponse';
-import { RequirementsEntity } from '../entities/requirements.entity';
+import {
+  ReqActionsEntity,
+  RequirementsEntity
+} from '../entities/requirements.entity';
 
 @ApiTags('requirements')
 @Controller('requirements')
@@ -58,5 +61,11 @@ export class RequirementsController {
   @ApiOkResponse({ type: RequirementsEntity })
   remove(@Param() params: FindByIdDto) {
     return this.requirementsService.remove(params);
+  }
+
+  @Get('actions/:id')
+  @ApiOkResponse({ type: ReqActionsEntity })
+  getReqActions(@Param() params: FindByIdDto): Promise<any> {
+    return this.requirementsService.getReqActions(params);
   }
 }
