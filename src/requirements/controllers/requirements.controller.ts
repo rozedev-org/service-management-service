@@ -6,7 +6,8 @@ import {
   Param,
   Post,
   Put,
-  Query
+  Query,
+  UseGuards
 } from '@nestjs/common';
 import { RequirementsService } from '../services/requirements.service';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -23,8 +24,10 @@ import {
   ReqActionsEntity,
   RequirementsEntity
 } from '../entities/requirements.entity';
+import { JwtAuthGuard } from '@app/auth/guards/jwt-authentication.guard';
 
 @ApiTags('requirements')
+@UseGuards(JwtAuthGuard)
 @Controller('requirements')
 export class RequirementsController {
   constructor(private readonly requirementsService: RequirementsService) {}
