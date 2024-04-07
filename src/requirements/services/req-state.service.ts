@@ -35,17 +35,7 @@ export class ReqStateService {
 
     const data = await this.prisma.requirementState.findMany({
       skip,
-      take,
-      include: {
-        Requirement: {
-          include: {
-            user: true
-          }
-        }
-      },
-      orderBy: {
-        secuence: 'asc'
-      }
+      take
     });
 
     const pageMetaDto = new PageMetaDto({
