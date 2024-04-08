@@ -6,7 +6,8 @@ import {
   Param,
   Post,
   Put,
-  Query
+  Query,
+  UseGuards
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ReqStateService } from '../services/req-state.service';
@@ -20,8 +21,10 @@ import {
   UpdateReqStateDto
 } from '../dtos/req-state.dto';
 import { PageDto } from '@common/dtos/page.dto';
+import { JwtAuthGuard } from '@app/auth/guards/jwt-authentication.guard';
 
 @ApiTags('requirement state')
+@UseGuards(JwtAuthGuard)
 @Controller('req-state')
 export class ReqStateController {
   constructor(private readonly reqStateService: ReqStateService) {}

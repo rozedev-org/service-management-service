@@ -9,10 +9,23 @@ import { GetUsersDto } from '../dtos/users.dto';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
+
+  async findUsername(userName: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { userName }
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User ${userName} not found`);
+    }
+
+    return user;
+  }
 
   async user({ id }: FindByIdDto): Promise<User> {
     const userData = await this.prisma.user.findUnique({
@@ -52,8 +65,13 @@ export class UsersService {
       throw new BadRequestException(`User ${data.userName} already exists`);
     }
 
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
     return this.prisma.user.create({
-      data
+      data: {
+        ...data,
+        password: hashedPassword
+      }
     });
   }
 
