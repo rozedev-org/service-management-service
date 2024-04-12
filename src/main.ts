@@ -8,16 +8,9 @@ import {
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { LoggerWinston } from '@common/utils/logger';
-import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface';
 
 async function bootstrap() {
-  const httpsOptions: HttpsOptions = {
-    key: fs.readFileSync('./secrets/private_key.pem'),
-    cert: fs.readFileSync('./secrets/certificate.crt')
-  };
-
   const app = await NestFactory.create(AppModule, {
-    httpsOptions,
     logger: new LoggerWinston()
   });
 
