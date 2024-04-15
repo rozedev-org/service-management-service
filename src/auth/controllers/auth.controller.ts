@@ -38,8 +38,7 @@ export class AuthController {
       .cookie('Authentication', token, {
         httpOnly: true,
         secure: this.configService.nodeEnv === 'production',
-        sameSite:
-          this.configService.nodeEnv === 'production' ? 'strict' : 'none',
+        sameSite: this.configService.nodeEnv === 'production' ? 'none' : 'lax',
         expires: new Date(
           Date.now() + Number(this.configService.jwtExpirationTime) * 1000
         )
