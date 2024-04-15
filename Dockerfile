@@ -10,6 +10,7 @@ RUN npm install
 
 # Copy the directory
 COPY . .
+ENV NEXT_PUBLIC_API_BFF /bff/api/service-manager-service/v1
 
 # Compile files in the dist folder
 RUN npm run build
