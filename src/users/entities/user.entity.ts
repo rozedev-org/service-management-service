@@ -17,3 +17,30 @@ export class UserEntity implements User {
   @ApiProperty()
   updatedAt: Date;
 }
+
+class Requirement {
+  @ApiProperty()
+  id: number;
+  @ApiProperty()
+  userId: number;
+  @ApiProperty()
+  stateId: number;
+  @ApiProperty()
+  title: string;
+  @ApiProperty()
+  createdAt: Date;
+  @ApiProperty()
+  updatedAt: Date;
+}
+
+export class RequirementsByUser {
+  @ApiProperty()
+  id: number;
+  @ApiProperty()
+  @ApiProperty()
+  title: string;
+  @ApiProperty()
+  secuence: number;
+  @ApiProperty({ type: [Requirement] })
+  Requirement: Requirement[];
+}

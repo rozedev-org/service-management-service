@@ -15,7 +15,7 @@ import { UsersService } from '../services/users.service';
 import { CreateUserDto, GetUsersDto, UpdateUserDto } from '../dtos/users.dto';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { ApiPaginatedResponse } from '@common/decorators/ApiPaginatedResponse';
-import { UserEntity } from '../entities/user.entity';
+import { RequirementsByUser, UserEntity } from '../entities/user.entity';
 import { PageDto } from '@common/dtos/page.dto';
 import { JwtAuthGuard } from '@app/auth/guards/jwt-authentication.guard';
 @ApiTags('Users')
@@ -52,5 +52,11 @@ export class UsersController {
   @ApiOkResponse({ type: UserEntity })
   remove(@Param() params: FindByIdDto) {
     return this.usersService.remove(params);
+  }
+
+  @Get(':id/requirements')
+  @ApiOkResponse({ type: RequirementsByUser, isArray: true })
+  requirementsByUser(@Param() params: FindByIdDto) {
+    return this.usersService.requirementsByUser(params);
   }
 }

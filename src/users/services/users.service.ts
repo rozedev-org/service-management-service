@@ -10,6 +10,7 @@ import { FindByIdDto } from '@app/dtos/generic.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import * as bcrypt from 'bcrypt';
+import { RequirementsByUser } from '../entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -94,6 +95,26 @@ export class UsersService {
 
     return this.prisma.user.delete({
       where: { id }
+    });
+  }
+
+  async requirementsByUser({ id }: FindByIdDto): Promise<RequirementsByUser[]> {
+    await this.user({ id });
+
+    return await this.prisma.requirementState.findMany({
+      select: {
+        id: true,
+        title: true,
+        secuence: true,
+        Requirement: {
+          where: {
+            userId: id
+          }
+        }
+      },
+      orderBy: {
+        secuence: 'asc'
+      }
     });
   }
 }
