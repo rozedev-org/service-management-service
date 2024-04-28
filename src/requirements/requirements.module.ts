@@ -3,12 +3,21 @@ import { RequirementsService } from './services/requirements.service';
 import { RequirementsController } from './controllers/requirements.controller';
 import { PrismaModule } from '@app/database/prisma.module';
 import { UsersService } from '@app/users/services/users.service';
-import { ReqStateController } from './controllers/req-state.controller';
-import { ReqStateService } from './services/req-state.service';
+import { ReqStateController } from './controllers/state/req-state.controller';
+import { ReqStateService } from './services/req-state/req-state.service';
+import { ReqTypeService } from './services/req-type/req-type.service';
+import { ReqTypeFieldService } from './services/req-type/req-type-field.service';
+import { ReqTypeController } from './controllers/type/req-type.controller';
 
 @Module({
   imports: [PrismaModule],
-  providers: [RequirementsService, UsersService, ReqStateService],
-  controllers: [RequirementsController, ReqStateController]
+  providers: [
+    RequirementsService,
+    UsersService,
+    ReqStateService,
+    ReqTypeService,
+    ReqTypeFieldService
+  ],
+  controllers: [ReqTypeController, ReqStateController, RequirementsController]
 })
 export class RequirementsModule {}
