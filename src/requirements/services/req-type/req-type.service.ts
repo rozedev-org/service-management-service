@@ -9,10 +9,15 @@ import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { RequirementType } from '@prisma/client';
+import { ReqTypeFieldService } from './req-type-field.service';
+import { CreateReqTypeFieldDto } from '@app/requirements/dtos/req-type-field.dto';
 
 @Injectable()
 export class ReqTypeService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private reqTypeFieldService: ReqTypeFieldService
+  ) {}
 
   /**
    * Retrieves a requirement type by its ID.
@@ -22,7 +27,8 @@ export class ReqTypeService {
    */
   async reqType({ id }: FindByIdDto): Promise<RequirementType> {
     const reqTypeData = await this.prisma.requirementType.findUnique({
-      where: { id }
+      where: { id },
+      include: { requirementTypeField: true }
     });
     if (!reqTypeData) {
       throw new NotFoundException(`Requirement type ${id} not found`);
@@ -60,9 +66,20 @@ export class ReqTypeService {
    * @returns A Promise that resolves to the created requirement type.
    */
   async create(data: CreateReqTypeDto): Promise<RequirementType> {
-    return this.prisma.requirementType.create({
-      data
+    const reqType = await this.prisma.requirementType.create({
+      data: { name: data.name }
     });
+
+    const reqTypeFieldsPaylod: CreateReqTypeFieldDto[] =
+      data.requirementTypeField.map((r) => ({
+        requirementTypeId: reqType.id,
+        title: r.title,
+        type: r.type
+      }));
+    const reqTypeFields =
+      await this.reqTypeFieldService.create(reqTypeFieldsPaylod);
+    console.log(reqTypeFields);
+    return await this.reqType({ id: reqType.id });
   }
 
   /**
@@ -79,10 +96,16 @@ export class ReqTypeService {
     const { id } = params;
 
     await this.reqType({ id });
-    return this.prisma.requirementType.update({
+    await this.prisma.requirementType.update({
       where: { id },
-      data
+      data: { name: data.name }
     });
+
+    if (data.requirementTypeField.length) {
+      await this.reqTypeFieldService.update(data.requirementTypeField);
+    }
+
+    return await this.reqType({ id });
   }
 
   /**

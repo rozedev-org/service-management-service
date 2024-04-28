@@ -47,13 +47,13 @@ model RequirementState {
 model RequirementType {
   id                   Int                    @id @default(autoincrement())
   name                 String
-  RequirementTypeField RequirementTypeField[]
+  requirementTypeField RequirementTypeField[]
 }
 
 model RequirementTypeField {
   id                Int             @id @default(autoincrement())
   title             String
   type              String
-  requirementType   RequirementType @relation(fields: [requirementTypeId], references: [id])
+  requirementType   RequirementType @relation(fields: [requirementTypeId], references: [id], onDelete: Cascade)
   requirementTypeId Int             @map("requirement_type_id")
 }
