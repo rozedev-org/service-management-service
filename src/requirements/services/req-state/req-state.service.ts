@@ -10,7 +10,7 @@ import {
   CreateReqStateDto,
   GetReqStatesDto,
   UpdateReqStateDto
-} from '../dtos/req-state.dto';
+} from '../../dtos/req-state.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
 

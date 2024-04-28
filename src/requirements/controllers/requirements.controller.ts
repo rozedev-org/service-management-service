@@ -34,13 +34,13 @@ export class RequirementsController {
 
   @Get(':id')
   @ApiOkResponse({ type: RequirementsEntity })
-  getUser(@Param() params: FindByIdDto): Promise<Requirement> {
+  getRequirement(@Param() params: FindByIdDto): Promise<Requirement> {
     return this.requirementsService.requirement(params);
   }
 
   @Get()
   @ApiPaginatedResponse(RequirementsEntity)
-  async getUsers(
+  async getRequirements(
     @Query() queryParams: GetRequirementsDto
   ): Promise<PageDto<Requirement>> {
     return this.requirementsService.requirements(queryParams);
@@ -48,9 +48,7 @@ export class RequirementsController {
 
   @Post()
   @ApiOkResponse({ type: RequirementsEntity })
-  async signupUser(
-    @Body() payload: CreateRequirementsDto
-  ): Promise<Requirement> {
+  async create(@Body() payload: CreateRequirementsDto): Promise<Requirement> {
     return this.requirementsService.create(payload);
   }
 

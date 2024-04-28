@@ -106,7 +106,7 @@ export class UsersService {
         id: true,
         title: true,
         secuence: true,
-        Requirement: {
+        requirement: {
           where: {
             userId: id
           }

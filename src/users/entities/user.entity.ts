@@ -42,5 +42,5 @@ export class RequirementsByUser {
   @ApiProperty()
   secuence: number;
   @ApiProperty({ type: [Requirement] })
-  Requirement: Requirement[];
+  requirement: Requirement[];
 }
