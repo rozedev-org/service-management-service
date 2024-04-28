@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateReqTypeFieldDto {
   @ApiProperty()
@@ -18,5 +18,6 @@ export class CreateReqTypeFieldDto {
 export class UpdateReqTypeFieldDto extends PartialType(CreateReqTypeFieldDto) {
   @ApiProperty()
   @IsNumber()
-  id: number;
+  @IsOptional()
+  id?: number;
 }

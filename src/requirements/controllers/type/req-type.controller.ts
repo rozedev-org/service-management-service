@@ -5,6 +5,7 @@ import {
   GetReqTypesDto,
   UpdateReqTypeDto
 } from '@app/requirements/dtos/req-type.dto';
+import { ReqTypeFieldService } from '@app/requirements/services/req-type/req-type-field.service';
 import { ReqTypeService } from '@app/requirements/services/req-type/req-type.service';
 import { PageDto } from '@common/dtos/page.dto';
 import {
@@ -19,13 +20,16 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { RequirementType } from '@prisma/client';
+import { RequirementType, RequirementTypeField } from '@prisma/client';
 
 @ApiTags('requirement types')
 @UseGuards(JwtAuthGuard)
 @Controller('/requirements/type')
 export class ReqTypeController {
-  constructor(private readonly reqTypeService: ReqTypeService) {}
+  constructor(
+    private readonly reqTypeService: ReqTypeService,
+    private readonly reqTypeFieldService: ReqTypeFieldService
+  ) {}
 
   @Get(':id')
   getReqType(@Param() params: FindByIdDto): Promise<RequirementType> {
@@ -55,5 +59,12 @@ export class ReqTypeController {
   @Delete(':id')
   deleteReqType(@Param() params: FindByIdDto): Promise<RequirementType> {
     return this.reqTypeService.remove(params);
+  }
+
+  @Delete('field/:id')
+  deleteReqTypeField(
+    @Param() params: FindByIdDto
+  ): Promise<RequirementTypeField> {
+    return this.reqTypeFieldService.remove(params);
   }
 }
