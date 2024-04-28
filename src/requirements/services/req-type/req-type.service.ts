@@ -8,9 +8,9 @@ import {
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { RequirementType } from '@prisma/client';
 import { ReqTypeFieldService } from './req-type-field.service';
 import { CreateReqTypeFieldDto } from '@app/requirements/dtos/req-type-field.dto';
+import { ReqTypeEntity } from '@app/requirements/entities/req-type.entity';
 
 @Injectable()
 export class ReqTypeService {
@@ -25,7 +25,7 @@ export class ReqTypeService {
    * @returns A Promise that resolves to the requirement type.
    * @throws NotFoundException if the requirement type with the specified ID is not found.
    */
-  async reqType({ id }: FindByIdDto): Promise<RequirementType> {
+  async reqType({ id }: FindByIdDto): Promise<ReqTypeEntity> {
     const reqTypeData = await this.prisma.requirementType.findUnique({
       where: { id },
       include: { requirementTypeField: true }
@@ -42,10 +42,11 @@ export class ReqTypeService {
    * @param params - The parameters for pagination (skip and take).
    * @returns A Promise that resolves to a PageDto containing the requirement types and pagination metadata.
    */
-  async reqTypes(params: GetReqTypesDto): Promise<PageDto<RequirementType>> {
+  async reqTypes(params: GetReqTypesDto): Promise<PageDto<ReqTypeEntity>> {
     const { skip, take } = params;
     const itemCount = await this.prisma.requirementType.count();
     const data = await this.prisma.requirementType.findMany({
+      include: { requirementTypeField: true },
       skip,
       take
     });
@@ -65,7 +66,7 @@ export class ReqTypeService {
    * @param data - The data for the new requirement type.
    * @returns A Promise that resolves to the created requirement type.
    */
-  async create(data: CreateReqTypeDto): Promise<RequirementType> {
+  async create(data: CreateReqTypeDto): Promise<ReqTypeEntity> {
     const reqType = await this.prisma.requirementType.create({
       data: { name: data.name }
     });
@@ -92,7 +93,7 @@ export class ReqTypeService {
   async update(
     params: FindByIdDto,
     data: UpdateReqTypeDto
-  ): Promise<RequirementType> {
+  ): Promise<ReqTypeEntity> {
     const { id } = params;
 
     await this.reqType({ id });
@@ -113,9 +114,10 @@ export class ReqTypeService {
    * @param {FindByIdDto} param - The ID of the requirement type to be removed.
    * @returns {Promise<RequirementType>} - A promise that resolves to the removed requirement type.
    */
-  async remove({ id }: FindByIdDto): Promise<RequirementType> {
+  async remove({ id }: FindByIdDto): Promise<ReqTypeEntity> {
     await this.reqType({ id });
     return this.prisma.requirementType.delete({
+      include: { requirementTypeField: true },
       where: { id }
     });
   }

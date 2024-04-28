@@ -5,8 +5,13 @@ import {
   GetReqTypesDto,
   UpdateReqTypeDto
 } from '@app/requirements/dtos/req-type.dto';
+import {
+  ReqTypeEntity,
+  ReqTypeFieldEntity
+} from '@app/requirements/entities/req-type.entity';
 import { ReqTypeFieldService } from '@app/requirements/services/req-type/req-type-field.service';
 import { ReqTypeService } from '@app/requirements/services/req-type/req-type.service';
+import { ApiPaginatedResponse } from '@common/decorators/ApiPaginatedResponse';
 import { PageDto } from '@common/dtos/page.dto';
 import {
   Body,
@@ -19,7 +24,7 @@ import {
   Query,
   UseGuards
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { RequirementType, RequirementTypeField } from '@prisma/client';
 
 @ApiTags('requirement types')
@@ -32,23 +37,27 @@ export class ReqTypeController {
   ) {}
 
   @Get(':id')
-  getReqType(@Param() params: FindByIdDto): Promise<RequirementType> {
+  @ApiOkResponse({ type: ReqTypeEntity })
+  getReqType(@Param() params: FindByIdDto): Promise<ReqTypeEntity> {
     return this.reqTypeService.reqType(params);
   }
 
   @Get()
+  @ApiPaginatedResponse(ReqTypeEntity)
   getReqTypes(
     @Query() queryParams: GetReqTypesDto
-  ): Promise<PageDto<RequirementType>> {
+  ): Promise<PageDto<ReqTypeEntity>> {
     return this.reqTypeService.reqTypes(queryParams);
   }
 
   @Post()
+  @ApiOkResponse({ type: ReqTypeEntity })
   createReqType(@Body() payload: CreateReqTypeDto): Promise<RequirementType> {
     return this.reqTypeService.create(payload);
   }
 
   @Put(':id')
+  @ApiOkResponse({ type: ReqTypeEntity })
   updateReqType(
     @Param() params: FindByIdDto,
     @Body() payload: UpdateReqTypeDto
@@ -57,11 +66,13 @@ export class ReqTypeController {
   }
 
   @Delete(':id')
+  @ApiOkResponse({ type: ReqTypeEntity })
   deleteReqType(@Param() params: FindByIdDto): Promise<RequirementType> {
     return this.reqTypeService.remove(params);
   }
 
   @Delete('field/:id')
+  @ApiOkResponse({ type: ReqTypeFieldEntity })
   deleteReqTypeField(
     @Param() params: FindByIdDto
   ): Promise<RequirementTypeField> {
