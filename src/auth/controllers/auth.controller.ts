@@ -34,18 +34,20 @@ export class AuthController {
     const { user } = request;
 
     const token = this.authService.generateToken(user.id);
+    const expiresIn = new Date(
+      Date.now() + Number(this.configService.jwtExpirationTime) * 1000
+    );
     response
       .cookie('Authentication', token, {
         httpOnly: true,
         secure: this.configService.nodeEnv === 'production',
         sameSite: this.configService.nodeEnv === 'production' ? 'none' : 'lax',
-        expires: new Date(
-          Date.now() + Number(this.configService.jwtExpirationTime) * 1000
-        )
+        expires: expiresIn
       })
       .json({
         user,
-        token
+        token,
+        expiresIn
       });
   }
 
