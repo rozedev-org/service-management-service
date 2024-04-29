@@ -15,7 +15,7 @@ import { UserEntity } from '@app/users/entities/user.entity';
 import config from '@app/config';
 import { ConfigType } from '@nestjs/config';
 import { JwtAuthGuard } from '../guards/jwt-authentication.guard';
-
+import { DateTime } from 'luxon';
 interface RequestWithUser extends Request {
   user: UserEntity;
 }
@@ -34,10 +34,13 @@ export class AuthController {
   async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
     const { user } = request;
 
-    const token = this.authService.generateToken(user.id);
-    const expiresIn = new Date(
-      Date.now() + Number(this.configService.jwtExpirationTime) * 1000
-    );
+    const dt = DateTime.now().plus({
+      seconds: Number(this.configService.jwtExpirationTime)
+    });
+
+    const expiresIn = dt.toJSDate();
+    const token = this.authService.generateToken(user.id, expiresIn);
+
     response
       .cookie('Authentication', token, {
         httpOnly: true,
