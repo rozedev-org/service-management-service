@@ -14,6 +14,7 @@ import { Request, Response } from 'express';
 import { UserEntity } from '@app/users/entities/user.entity';
 import config from '@app/config';
 import { ConfigType } from '@nestjs/config';
+import { JwtAuthGuard } from '../guards/jwt-authentication.guard';
 
 interface RequestWithUser extends Request {
   user: UserEntity;
@@ -51,10 +52,15 @@ export class AuthController {
       });
   }
 
+  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Post('validate')
-  validate(@Req() req: Request) {
-    const token = req.headers.authorization;
-    return this.authService.validateToken(token);
+  async validate(@Req() req: Request) {
+    const token = req.headers.cookie
+      .split(';')
+      .find((c) => c.trim().startsWith('Authentication'))
+      .split('=')[1];
+
+    return await this.authService.validateToken(token);
   }
 }
