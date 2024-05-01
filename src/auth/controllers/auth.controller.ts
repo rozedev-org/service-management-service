@@ -50,7 +50,6 @@ export class AuthController {
       })
       .json({
         user,
-        token,
         expiresIn
       });
   }
