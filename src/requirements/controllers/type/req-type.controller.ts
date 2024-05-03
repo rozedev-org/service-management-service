@@ -1,5 +1,6 @@
 import { JwtAuthGuard } from '@app/auth/guards/jwt-authentication.guard';
 import { FindByIdDto } from '@app/dtos/generic.dto';
+import { DeleteReqTypeFieldDto } from '@app/requirements/dtos/req-type-field.dto';
 import {
   CreateReqTypeDto,
   GetReqTypesDto,
@@ -65,17 +66,17 @@ export class ReqTypeController {
     return this.reqTypeService.update(params, payload);
   }
 
+  @Delete('field')
+  @ApiOkResponse({ type: ReqTypeFieldEntity })
+  deleteReqTypeField(
+    @Body() payload: DeleteReqTypeFieldDto
+  ): Promise<RequirementTypeField[]> {
+    return this.reqTypeFieldService.remove(payload);
+  }
+
   @Delete(':id')
   @ApiOkResponse({ type: ReqTypeEntity })
   deleteReqType(@Param() params: FindByIdDto): Promise<RequirementType> {
     return this.reqTypeService.remove(params);
-  }
-
-  @Delete('field/:id')
-  @ApiOkResponse({ type: ReqTypeFieldEntity })
-  deleteReqTypeField(
-    @Param() params: FindByIdDto
-  ): Promise<RequirementTypeField> {
-    return this.reqTypeFieldService.remove(params);
   }
 }

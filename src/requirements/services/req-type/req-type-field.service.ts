@@ -2,6 +2,7 @@ import { PrismaService } from '@app/database/prisma.service';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import {
   CreateReqTypeFieldDto,
+  DeleteReqTypeFieldDto,
   UpdateReqTypeFieldDto
 } from '@app/requirements/dtos/req-type-field.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -66,8 +67,18 @@ export class ReqTypeFieldService {
    * @param {FindByIdDto} param - The ID of the requirement type field to be removed.
    * @returns {Promise<RequirementTypeField>} - A promise that resolves to the removed requirement type field.
    */
-  async remove({ id }: FindByIdDto): Promise<RequirementTypeField> {
-    await this.reqTypeField({ id });
-    return this.prisma.requirementTypeField.delete({ where: { id } });
+  async remove(
+    payload: DeleteReqTypeFieldDto
+  ): Promise<RequirementTypeField[]> {
+    const { requirementsTypeFieldsDeleted } = payload;
+    const deletedFields = [];
+    for await (const fieldId of requirementsTypeFieldsDeleted) {
+      await this.reqTypeField({ id: fieldId });
+      const deletedResult = await this.prisma.requirementTypeField.delete({
+        where: { id: fieldId }
+      });
+      deletedFields.push(deletedResult);
+    }
+    return deletedFields;
   }
 }
