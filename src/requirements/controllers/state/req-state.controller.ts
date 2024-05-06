@@ -10,8 +10,8 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { ReqStateService } from '../services/req-state.service';
-import { ReqStateEntity } from '../entities/req-state.entity';
+import { ReqStateService } from '../../services/req-state/req-state.service';
+import { ReqStateEntity } from '../../entities/req-state.entity';
 import { RequirementState } from '@prisma/client';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { ApiPaginatedResponse } from '@common/decorators/ApiPaginatedResponse';
@@ -19,13 +19,13 @@ import {
   CreateReqStateDto,
   GetReqStatesDto,
   UpdateReqStateDto
-} from '../dtos/req-state.dto';
+} from '../../dtos/req-state.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import { JwtAuthGuard } from '@app/auth/guards/jwt-authentication.guard';
 
 @ApiTags('requirement state')
 @UseGuards(JwtAuthGuard)
-@Controller('req-state')
+@Controller('requirements/state')
 export class ReqStateController {
   constructor(private readonly reqStateService: ReqStateService) {}
 

@@ -1,6 +1,7 @@
 import {
   Controller,
   HttpCode,
+  Inject,
   Post,
   Req,
   Res,
@@ -11,7 +12,10 @@ import { AuthService } from '../services/auth.service';
 import { LocalAuthenticationGuard } from '../guards/localAuthentication.guard';
 import { Request, Response } from 'express';
 import { UserEntity } from '@app/users/entities/user.entity';
-
+import config from '@app/config';
+import { ConfigType } from '@nestjs/config';
+import { JwtAuthGuard } from '../guards/jwt-authentication.guard';
+import { DateTime } from 'luxon';
 interface RequestWithUser extends Request {
   user: UserEntity;
 }
@@ -19,7 +23,10 @@ interface RequestWithUser extends Request {
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    @Inject(config.KEY) private configService: ConfigType<typeof config>
+  ) {}
 
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
@@ -27,18 +34,35 @@ export class AuthController {
   async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
     const { user } = request;
 
-    const token = this.authService.generateToken(user.id);
-
-    response.json({
-      user,
-      token
+    const dt = DateTime.now().plus({
+      seconds: Number(this.configService.jwtExpirationTime)
     });
+
+    const expiresIn = dt.toJSDate();
+    const token = this.authService.generateToken(user.id, expiresIn);
+
+    response
+      .cookie('Authentication', token, {
+        httpOnly: true,
+        secure: this.configService.nodeEnv === 'production',
+        sameSite: this.configService.nodeEnv === 'production' ? 'none' : 'lax',
+        expires: expiresIn
+      })
+      .json({
+        user,
+        expiresIn
+      });
   }
 
+  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Post('validate')
-  validate(@Req() req: Request) {
-    const token = req.headers.authorization;
-    return this.authService.validateToken(token);
+  async validate(@Req() req: Request) {
+    const token = req.headers.cookie
+      .split(';')
+      .find((c) => c.trim().startsWith('Authentication'))
+      .split('=')[1];
+
+    return await this.authService.validateToken(token);
   }
 }

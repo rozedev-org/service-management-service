@@ -5,6 +5,7 @@ export default registerAs('config', () => {
     databaseURL: process.env.DATABASE_URL,
     appPort: parseInt(process.env.APP_PORT),
     jwtExpirationTime: process.env.JWT_EXPIRATION_TIME,
-    jwtSecret: process.env.JWT_SECRET
+    jwtSecret: process.env.JWT_SECRET,
+    nodeEnv: process.env.NODE_ENV
   };
 });

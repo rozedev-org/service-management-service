@@ -4,7 +4,6 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import config from '@app/config';
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -22,22 +21,28 @@ export class AuthService {
     return null;
   }
 
-  public generateToken(userId: number) {
+  public generateToken(userId: number, expiresIn: Date) {
     const payload: {
       userId: number;
+      expiresIn: Date;
     } = {
-      userId
+      userId,
+      expiresIn
     };
     const token = this.jwtService.sign(payload);
 
     return token;
   }
 
-  validateToken(token: string) {
+  async validateToken(token: string) {
     try {
       const tokenWithoutBearer = token.replace('Bearer ', '');
       const verify = this.jwtService.verify(tokenWithoutBearer);
-      return verify;
+      console.log(verify);
+      const user = await this.userService.user({ id: verify.userId });
+      delete user.password;
+
+      return { user, expiresIn: verify.expiresIn };
     } catch (e) {
       throw new UnauthorizedException('not allow');
     }

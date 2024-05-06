@@ -8,12 +8,13 @@ import {
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { LoggerWinston } from '@common/utils/logger';
-
+import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new LoggerWinston()
   });
 
+  app.use(cookieParser());
   app.setGlobalPrefix('api/service-manager-service/v1');
 
   app.useGlobalPipes(
@@ -40,8 +41,8 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   fs.writeFileSync('./docs/swagger.json', JSON.stringify(document));
-  app.enableCors();
-  await app.listen(process.env.PORT || 8000, '0.0.0.0');
+  app.enableCors({ credentials: true, origin: true });
+  await app.listen(process.env.APP_PORT || 8000, '0.0.0.0');
   Logger.log(`Application is running on: ${await app.getUrl()}`, 'Main');
 }
 bootstrap();

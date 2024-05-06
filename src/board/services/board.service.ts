@@ -8,7 +8,7 @@ export class BoardService {
   async getBoard() {
     const data = await this.prisma.requirementState.findMany({
       include: {
-        Requirement: {
+        requirement: {
           include: {
             user: true
           }
