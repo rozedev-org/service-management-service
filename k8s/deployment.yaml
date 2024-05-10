@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-management-service
+  namespace: service-management
+  labels:
+    app: service-management-service
+spec:
+  selector:
+    matchLabels:
+      name: service-management-service-pod
+      app: service-management-service
+  replicas: 1
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      name: service-management-service-pod
+      labels:
+        name: service-management-service-pod
+        app: service-management-service
+    spec:
+      containers:
+        - name: service-management-service
+          image: jcdev.online:32000/service-management-service
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          # resources:
+          #   requests:
+          #     memory: '200Mi'
+          #     cpu: '100m'
+          #   limits:
+          #     memory: '500Mi'
+          #     cpu: '200m'
+

@@ -17,7 +17,7 @@ RUN npm run build
 
 #COPY dist ./dist
 # Expose the port 3000
-EXPOSE 8081
+EXPOSE 5000
 
 # install to datadog agent
 
