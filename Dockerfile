@@ -1,5 +1,5 @@
 # Start from the node image v18
-FROM node:18.16.1-alpine
+FROM node:18.19.0-alpine
 
 # Change the work directory app
 WORKDIR /app
