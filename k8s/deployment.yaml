@@ -23,6 +23,11 @@ spec:
         - name: service-management-service
           image: jcdev.online:32000/service-management-service
           imagePullPolicy: Always
+          envFrom:
+          #- secretRef:
+          #name: service-management-service-sc
+          - configMapRef:
+             name: service-management-service-cm
           ports:
             - containerPort: 5000
           # resources:
@@ -32,9 +37,4 @@ spec:
           #   limits:
           #     memory: '500Mi'
           #     cpu: '200m'
-      envFrom:
-          #- secretRef:
-          #name: service-management-service-sc
-         - configMapRef:
-             name: service-management-service-cm
-
+      
