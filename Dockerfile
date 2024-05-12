@@ -11,6 +11,8 @@ RUN npm install
 # Copy the directory
 COPY . .
 
+RUN npx prisma generate
+
 # Compile files in the dist folder
 RUN npm run build
 
