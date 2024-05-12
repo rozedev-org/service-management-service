@@ -34,7 +34,7 @@ spec:
           #     cpu: '200m'
       envFrom:
           #- secretRef:
-          #name: alerti-configurations-adapter-env
+          #name: service-management-service-sc
          - configMapRef:
-             name: alerti-configurations-adapter-cm
+             name: service-management-service-cm
 
