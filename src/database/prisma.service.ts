@@ -20,7 +20,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       where: { userName: 'admin' }
     });
     if (!defaultUser) {
-      await this.user.create({
+      const adminUser = await this.user.create({
         data: {
           userName: 'admin',
           password: process.env.DEFAULT_ADMIN_PASS || 'admin',
@@ -28,6 +28,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
           firstName: 'Admin'
         }
       });
+      console.log(adminUser);
     }
   }
 }
