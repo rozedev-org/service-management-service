@@ -8,8 +8,14 @@ import {
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { LoggerWinston } from '@common/utils/logger';
+
 import * as cookieParser from 'cookie-parser';
+import { sh } from '@common/utils/sh.util';
 async function bootstrap() {
+  if (process.env.ENVIRONMENT !== 'LOCAL') {
+    await sh('npm run migrations:generate');
+  }
+
   const app = await NestFactory.create(AppModule, {
     logger: new LoggerWinston()
   });
