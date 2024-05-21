@@ -19,7 +19,6 @@ export class CreateReqTypeDto {
   @ApiProperty()
   @IsString()
   name: string;
-
   @ApiProperty({ isArray: true, type: CreateReqTypeFieldDto })
   @IsArray()
   @ValidateNested({ each: true })
