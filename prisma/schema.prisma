@@ -25,14 +25,17 @@ model User {
 }
 
 model Requirement {
-  id        Int              @id @default(autoincrement())
-  user      User?            @relation(fields: [userId], references: [id])
-  userId    Int?             @map("user_id")
-  state     RequirementState @relation(fields: [stateId], references: [id])
-  stateId   Int              @map("state_id")
-  title     String           @default("")
-  createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @updatedAt @map("updated_at")
+  id                    Int                     @id @default(autoincrement())
+  user                  User?                   @relation(fields: [userId], references: [id])
+  userId                Int?                    @map("user_id")
+  state                 RequirementState        @relation(fields: [stateId], references: [id])
+  stateId               Int                     @map("state_id")
+  title                 String                  @default("")
+  createdAt             DateTime                @default(now()) @map("created_at")
+  updatedAt             DateTime                @updatedAt @map("updated_at")
+  requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id])
+  requirementTypeId     Int                     @map("requirement_type_id")
+  requirementFieldValue RequirementFieldValue[]
 }
 
 model RequirementState {
@@ -48,12 +51,23 @@ model RequirementType {
   id                   Int                    @id @default(autoincrement())
   name                 String
   requirementTypeField RequirementTypeField[]
+  Requirement          Requirement[]
 }
 
 model RequirementTypeField {
-  id                Int             @id @default(autoincrement())
-  title             String
-  type              String
-  requirementType   RequirementType @relation(fields: [requirementTypeId], references: [id], onDelete: Cascade)
-  requirementTypeId Int             @map("requirement_type_id")
+  id                    Int                     @id @default(autoincrement())
+  title                 String
+  type                  String
+  requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id], onDelete: Cascade)
+  requirementTypeId     Int                     @map("requirement_type_id")
+  RequirementFieldValue RequirementFieldValue[]
+}
+
+model RequirementFieldValue {
+  id                     Int                  @id @default(autoincrement())
+  value                  String
+  requirementTypeField   RequirementTypeField @relation(fields: [requirementTypeFieldId], references: [id], onDelete: Cascade)
+  requirementTypeFieldId Int                  @map("requirement_field_id")
+  requirement            Requirement          @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+  requirementId          Int                  @map("requirement_id")
 }
