@@ -58,6 +58,7 @@ model RequirementTypeField {
   id                    Int                     @id @default(autoincrement())
   title                 String
   type                  String
+  order                 Int                     @default(0)
   requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id], onDelete: Cascade)
   requirementTypeId     Int                     @map("requirement_type_id")
   RequirementFieldValue RequirementFieldValue[]

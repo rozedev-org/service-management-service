@@ -10,6 +10,9 @@ export class ReqTypeFieldEntity implements RequirementTypeField {
   type: string;
   @ApiProperty()
   requirementTypeId: number;
+
+  @ApiProperty()
+  order: number;
 }
 
 export class ReqTypeEntity implements RequirementType {
