@@ -28,7 +28,11 @@ export class ReqTypeService {
   async reqType({ id }: FindByIdDto): Promise<ReqTypeEntity> {
     const reqTypeData = await this.prisma.requirementType.findUnique({
       where: { id },
-      include: { requirementTypeField: true }
+      include: {
+        requirementTypeField: {
+          orderBy: { order: 'asc' }
+        }
+      }
     });
     if (!reqTypeData) {
       throw new NotFoundException(`Requirement type ${id} not found`);
@@ -46,7 +50,11 @@ export class ReqTypeService {
     const { skip, take } = params;
     const itemCount = await this.prisma.requirementType.count();
     const data = await this.prisma.requirementType.findMany({
-      include: { requirementTypeField: true },
+      include: {
+        requirementTypeField: {
+          orderBy: { order: 'asc' }
+        }
+      },
       skip,
       take
     });
@@ -75,7 +83,8 @@ export class ReqTypeService {
       data.requirementTypeField.map((r) => ({
         requirementTypeId: reqType.id,
         title: r.title,
-        type: r.type
+        type: r.type,
+        order: r.order
       }));
     const reqTypeFields =
       await this.reqTypeFieldService.create(reqTypeFieldsPaylod);

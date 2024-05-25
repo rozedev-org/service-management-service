@@ -1,7 +1,7 @@
 import { PageOptionsDto } from '@common/dtos/page.dto';
 import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
 import { UpdateReqTypeFieldDto } from './req-type-field.dto';
 
 export class GetReqTypesDto extends PageOptionsDto {}
@@ -13,6 +13,10 @@ class CreateReqTypeFieldDto {
   @ApiProperty()
   @IsString()
   type: string;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
 
 export class CreateReqTypeDto {
