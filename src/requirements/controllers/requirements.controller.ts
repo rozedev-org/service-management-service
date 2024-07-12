@@ -57,7 +57,6 @@ export class RequirementsController {
   @Put(':id')
   @ApiOkResponse({ type: RequirementsEntity })
   update(@Param() params: FindByIdDto, @Body() payload: UpdateRequirementsDto) {
-    console.log(payload);
     return this.requirementsService.update(params, payload);
   }
 
