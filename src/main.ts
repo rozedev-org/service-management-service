@@ -46,7 +46,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  fs.writeFileSync('./docs/swagger.json', JSON.stringify(document));
+  // fs.writeFileSync('./docs/swagger.json', JSON.stringify(document));
   app.enableCors({ credentials: true, origin: true });
   await app.listen(process.env.APP_PORT || 8000, '0.0.0.0');
   Logger.log(`Application is running on: ${await app.getUrl()}`, 'Main');

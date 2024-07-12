@@ -37,4 +37,40 @@ export class CreateRequirementsDto {
   requirementFieldValue: ReqFieldValueDto[];
 }
 
-export class UpdateRequirementsDto extends PartialType(CreateRequirementsDto) {}
+class UpdateRequirementFieldValueDto {
+  @ApiProperty()
+  @IsNumber()
+  id: number;
+
+  @ApiProperty()
+  @IsString()
+  value: string;
+}
+
+export class UpdateRequirementsDto {
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  userId?: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  title?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  stateId?: number;
+
+  @ApiProperty({
+    isArray: true,
+    type: UpdateRequirementFieldValueDto,
+    required: false
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UpdateRequirementFieldValueDto)
+  @IsOptional()
+  requirementFieldValue: UpdateRequirementFieldValueDto[];
+}

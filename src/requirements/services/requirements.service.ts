@@ -14,6 +14,7 @@ import {
   ReqActionsEntity,
   RequirementEntity
 } from '../entities/requirements.entity';
+import { use } from 'passport';
 
 @Injectable()
 export class RequirementsService {
@@ -91,20 +92,35 @@ export class RequirementsService {
     return requirement;
   }
 
-  // async update(
-  //   params: FindByIdDto,
-  //   data: UpdateRequirementsDto
-  // ): Promise<Requirement> {
-  //   const { id } = params;
+  async update(params: FindByIdDto, data: UpdateRequirementsDto) {
+    const { id } = params;
 
-  //   data.userId && (await this.userService.user({ id: data.userId }));
+    data.userId && (await this.userService.user({ id: data.userId }));
 
-  //   await this.requirement({ id });
-  //   return this.prisma.requirement.update({
-  //     where: { id },
-  //     data
-  //   });
-  // }
+    await this.requirement({ id });
+
+    const newRequirementData = {
+      title: data.title,
+      stateId: data.stateId,
+      userId: data.userId
+    };
+
+    await this.prisma.requirement.update({
+      where: { id },
+      data: newRequirementData
+    });
+
+    if (data.requirementFieldValue) {
+      for await (const fieldValue of data.requirementFieldValue) {
+        await this.prisma.requirementFieldValue.update({
+          where: { id: fieldValue.id },
+          data: { value: fieldValue.value }
+        });
+      }
+    }
+
+    return await this.requirement({ id });
+  }
 
   async remove({ id }: FindByIdDto): Promise<Requirement> {
     await this.requirement({ id });

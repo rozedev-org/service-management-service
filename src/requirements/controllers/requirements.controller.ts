@@ -51,14 +51,14 @@ export class RequirementsController {
   @ApiOkResponse({ type: RequirementsEntity })
   async create(@Body() payload: CreateRequirementsDto) {
     // : Promise<Requirement>
-
     return this.requirementsService.create(payload);
   }
 
   @Put(':id')
   @ApiOkResponse({ type: RequirementsEntity })
   update(@Param() params: FindByIdDto, @Body() payload: UpdateRequirementsDto) {
-    // return this.requirementsService.update(params, payload);
+    console.log(payload);
+    return this.requirementsService.update(params, payload);
   }
 
   @Delete(':id')
