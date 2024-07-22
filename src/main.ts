@@ -13,7 +13,7 @@ import * as cookieParser from 'cookie-parser';
 import { sh } from '@common/utils/sh.util';
 async function bootstrap() {
   if (process.env.ENVIRONMENT !== 'LOCAL') {
-    await sh('npm run migrations:generate');
+    await sh('npm run migrations:sync');
   }
 
   const app = await NestFactory.create(AppModule, {
