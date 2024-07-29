@@ -10,7 +10,11 @@ import {
 import { PageDto } from '@common/dtos/page.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { UsersService } from '@app/users/services/users.service';
-import { ReqActionsEntity } from '../entities/requirements.entity';
+import {
+  ReqActionsEntity,
+  RequirementEntity
+} from '../entities/requirements.entity';
+import { use } from 'passport';
 
 @Injectable()
 export class RequirementsService {
@@ -19,11 +23,16 @@ export class RequirementsService {
     private userService: UsersService
   ) {}
 
-  async requirement({ id }: FindByIdDto): Promise<Requirement> {
+  async requirement({ id }: FindByIdDto): Promise<RequirementEntity> {
     const requirementData = await this.prisma.requirement.findUnique({
       where: { id },
       include: {
-        user: true
+        user: true,
+        requirementFieldValue: {
+          include: {
+            requirementTypeField: true
+          }
+        }
       }
     });
     if (!requirementData) {
@@ -58,24 +67,59 @@ export class RequirementsService {
 
   async create(data: CreateRequirementsDto): Promise<Requirement> {
     data.userId && (await this.userService.user({ id: data.userId }));
-    return this.prisma.requirement.create({
-      data
+
+    const newRequirement = await this.prisma.requirement.create({
+      data: {
+        title: data.title,
+        stateId: data.stateId,
+        requirementTypeId: data.requirementTypeId,
+        userId: data.userId
+      }
     });
+
+    const reqFieldValue = data.requirementFieldValue.map((fieldValue) => ({
+      ...fieldValue,
+      requirementId: newRequirement.id
+    }));
+
+    await this.prisma.requirementFieldValue.createMany({
+      data: reqFieldValue
+    });
+    const requirement = await this.requirement({ id: newRequirement.id });
+    // return this.prisma.requirement.create({
+    //   data
+    // });
+    return requirement;
   }
 
-  async update(
-    params: FindByIdDto,
-    data: UpdateRequirementsDto
-  ): Promise<Requirement> {
+  async update(params: FindByIdDto, data: UpdateRequirementsDto) {
     const { id } = params;
 
     data.userId && (await this.userService.user({ id: data.userId }));
 
     await this.requirement({ id });
-    return this.prisma.requirement.update({
+
+    const newRequirementData = {
+      title: data.title,
+      stateId: data.stateId,
+      userId: data.userId
+    };
+
+    await this.prisma.requirement.update({
       where: { id },
-      data
+      data: newRequirementData
     });
+
+    if (data.requirementFieldValue) {
+      for await (const fieldValue of data.requirementFieldValue) {
+        await this.prisma.requirementFieldValue.update({
+          where: { id: fieldValue.id },
+          data: { value: fieldValue.value }
+        });
+      }
+    }
+
+    return await this.requirement({ id });
   }
 
   async remove({ id }: FindByIdDto): Promise<Requirement> {

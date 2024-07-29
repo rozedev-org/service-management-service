@@ -13,6 +13,10 @@ export class CreateReqTypeFieldDto {
   @ApiProperty()
   @IsNumber()
   requirementTypeId: number;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
 
 export class UpdateReqTypeFieldDto extends PartialType(CreateReqTypeFieldDto) {

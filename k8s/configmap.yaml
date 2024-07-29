@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-management-service-cm
+  namespace: service-management
+data:
+  APP_PORT: '5000'
+  DATABASE_URL: "postgresql://postgresadmin:t&+rl-aTM301@postgres:5432/service_management_db?schema=public"
+  JWT_EXPIRATION_TIME: '86400'
+  JWT_SECRET: 'secret'
+  DEFAULT_ADMIN_PASSWORD: '4Dm!n20301407'
+
+
+

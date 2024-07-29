@@ -65,4 +65,10 @@ export class AuthController {
 
     return await this.authService.validateToken(token);
   }
+
+  @Post('logout')
+  @HttpCode(200)
+  async logout(@Req() request: Request, @Res() response: Response) {
+    response.clearCookie('Authentication').json({ message: 'Logout' });
+  }
 }

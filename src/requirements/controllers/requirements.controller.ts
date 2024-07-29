@@ -22,6 +22,7 @@ import {
 import { ApiPaginatedResponse } from '@common/decorators/ApiPaginatedResponse';
 import {
   ReqActionsEntity,
+  RequirementEntity,
   RequirementsEntity
 } from '../entities/requirements.entity';
 import { JwtAuthGuard } from '@app/auth/guards/jwt-authentication.guard';
@@ -33,7 +34,7 @@ export class RequirementsController {
   constructor(private readonly requirementsService: RequirementsService) {}
 
   @Get(':id')
-  @ApiOkResponse({ type: RequirementsEntity })
+  @ApiOkResponse({ type: RequirementEntity })
   getRequirement(@Param() params: FindByIdDto): Promise<Requirement> {
     return this.requirementsService.requirement(params);
   }
@@ -48,7 +49,8 @@ export class RequirementsController {
 
   @Post()
   @ApiOkResponse({ type: RequirementsEntity })
-  async create(@Body() payload: CreateRequirementsDto): Promise<Requirement> {
+  async create(@Body() payload: CreateRequirementsDto) {
+    // : Promise<Requirement>
     return this.requirementsService.create(payload);
   }
 
