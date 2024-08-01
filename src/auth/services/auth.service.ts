@@ -15,10 +15,29 @@ export class AuthService {
   async validateUser(username: string, password: string) {
     const user = await this.userService.findUsername(username);
     const isMatch = await bcrypt.compare(password, user.password);
-    if (user && isMatch) {
-      return user;
+    if (!user && !user.isEnabled) {
+      return null;
     }
-    return null;
+    if (isMatch) {
+      user.loginTries = 0;
+      await this.userService.update(
+        { id: user.id },
+        { loginTries: 0, isEnabled: true }
+      );
+      return user;
+    } else {
+      console.log(user.loginTries);
+      user.loginTries += 1;
+      console.log(user.loginTries);
+      if (user.loginTries > 3) {
+        user.isEnabled = false;
+      }
+      await this.userService.update(
+        { id: user.id },
+        { loginTries: user.loginTries, isEnabled: user.isEnabled }
+      );
+      return null;
+    }
   }
 
   public generateToken(userId: number, expiresIn: Date) {

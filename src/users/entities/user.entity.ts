@@ -16,6 +16,10 @@ export class UserEntity implements User {
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;
+  @ApiProperty()
+  isEnabled: boolean;
+  @ApiProperty()
+  loginTries: number;
 }
 
 class Requirement {
