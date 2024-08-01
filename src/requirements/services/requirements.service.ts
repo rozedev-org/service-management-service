@@ -70,7 +70,6 @@ export class RequirementsService {
 
     const newRequirement = await this.prisma.requirement.create({
       data: {
-        title: data.title,
         stateId: data.stateId,
         requirementTypeId: data.requirementTypeId,
         userId: data.userId
@@ -100,7 +99,6 @@ export class RequirementsService {
     await this.requirement({ id });
 
     const newRequirementData = {
-      title: data.title,
       stateId: data.stateId,
       userId: data.userId
     };

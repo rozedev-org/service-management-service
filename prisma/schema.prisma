@@ -30,7 +30,6 @@ model Requirement {
   userId                Int?                    @map("user_id")
   state                 RequirementState        @relation(fields: [stateId], references: [id])
   stateId               Int                     @map("state_id")
-  title                 String                  @default("")
   createdAt             DateTime                @default(now()) @map("created_at")
   updatedAt             DateTime                @updatedAt @map("updated_at")
   requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id])

@@ -1,5 +1,5 @@
 import { PageOptionsDto } from '@common/dtos/page.dto';
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsNumber,
@@ -17,10 +17,6 @@ export class CreateRequirementsDto {
   @IsNumber()
   @IsOptional()
   userId: number | null;
-
-  @ApiProperty()
-  @IsString()
-  title: string;
 
   @ApiProperty()
   @IsNumber()
@@ -52,11 +48,6 @@ export class UpdateRequirementsDto {
   @IsNumber()
   @IsOptional()
   userId?: number;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  title?: string;
 
   @ApiProperty()
   @IsNumber()
