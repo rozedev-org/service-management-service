@@ -26,9 +26,7 @@ export class AuthService {
       );
       return user;
     } else {
-      console.log(user.loginTries);
       user.loginTries += 1;
-      console.log(user.loginTries);
       if (user.loginTries > 3) {
         user.isEnabled = false;
       }
