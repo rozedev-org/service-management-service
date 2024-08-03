@@ -22,6 +22,8 @@ model User {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   requirement Requirement[]
+  isEnabled   Boolean       @map("is_enabled") @default(true)
+  loginTries  Int           @map("login_tries") @default(0)
 }
 
 model Requirement {
@@ -30,6 +32,7 @@ model Requirement {
   userId                Int?                    @map("user_id")
   state                 RequirementState        @relation(fields: [stateId], references: [id])
   stateId               Int                     @map("state_id")
+  title                 String                  @default("")
   createdAt             DateTime                @default(now()) @map("created_at")
   updatedAt             DateTime                @updatedAt @map("updated_at")
   requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id])
