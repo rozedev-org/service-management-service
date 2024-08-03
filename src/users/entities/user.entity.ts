@@ -30,8 +30,6 @@ class Requirement {
   @ApiProperty()
   stateId: number;
   @ApiProperty()
-  title: string;
-  @ApiProperty()
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;
