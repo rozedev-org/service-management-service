@@ -10,15 +10,6 @@ import { PageMetaDto } from '@common/dtos/page-meta.dto';
 export class ProfilesService {
   constructor(private prisma: PrismaService) {}
 
-  async findProfile(name: string): Promise<Profile> {
-    const profile = await this.prisma.profile.findFirst({ where: { name } });
-    if (!profile) {
-      throw new NotFoundException(`Profile ${name} not found`);
-    }
-
-    return profile;
-  }
-
   async profile({ id }: FindByIdDto): Promise<Profile> {
     const profileData = await this.prisma.profile.findUnique({
       where: { id }
@@ -48,9 +39,7 @@ export class ProfilesService {
   }
   async create(data: Prisma.ProfileCreateInput): Promise<Profile> {
     return this.prisma.profile.create({
-      data: {
-        ...data
-      }
+      data
     });
   }
   async update(

@@ -44,7 +44,7 @@ export class ProfilesController {
 
   @Post()
   @ApiOkResponse({ type: ProfileEntity })
-  async signupProfile(@Body() payload: CreateProfileDto): Promise<Profile> {
+  async createProfile(@Body() payload: CreateProfileDto): Promise<Profile> {
     return this.profileService.create(payload);
   }
 

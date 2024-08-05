@@ -22,19 +22,20 @@ model User {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   requirement Requirement[]
-  isEnabled   Boolean       @map("is_enabled") @default(true)
-  loginTries  Int           @map("login_tries") @default(0)
+  isEnabled   Boolean       @default(true) @map("is_enabled")
+  loginTries  Int           @default(0) @map("login_tries")
   profileId   Int           @map("profile_id")
   profile     Profile       @relation(fields: [profileId], references: [id])
 }
 
 model Profile {
-  id          Int           @id @default(autoincrement())
-  name        String        @map("name")
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @updatedAt @map("updated_at")
-  User User[]
+  id        Int      @id @default(autoincrement())
+  name      String   @map("name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  User      User[]
 }
+
 model Requirement {
   id                    Int                     @id @default(autoincrement())
   user                  User?                   @relation(fields: [userId], references: [id])

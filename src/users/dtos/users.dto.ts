@@ -1,6 +1,6 @@
 import { PageOptionsDto } from '@common/dtos/page.dto';
 import { PartialType } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 import { CreateProfileDto } from './profile.dto';
 
 export class GetUsersDto extends PageOptionsDto {}
@@ -14,7 +14,8 @@ export class CreateUserDto {
   firstName: string;
   @IsString()
   password: string;
-  Profile: CreateProfileDto;
+  @IsNumber()
+  profileId: number;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
