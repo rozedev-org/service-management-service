@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
 export class UserEntity implements User {
-  @ApiProperty()
   id: number;
   @ApiProperty()
   userName: string;
@@ -20,6 +19,8 @@ export class UserEntity implements User {
   isEnabled: boolean;
   @ApiProperty()
   loginTries: number;
+  @ApiProperty()
+  profileId: number;
 }
 
 class Requirement {
