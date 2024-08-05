@@ -50,7 +50,7 @@ export class ProfilesController {
 
   @Put(':id')
   @ApiOkResponse({ type: ProfileEntity })
-  update(@Param() params: FindByIdDto, @Body() payload: ProfileEntity) {
+  update(@Param() params: FindByIdDto, @Body() payload: UpdateProfileDto) {
     return this.profileService.update(params, payload);
   }
 

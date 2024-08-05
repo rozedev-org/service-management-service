@@ -2,7 +2,7 @@ import { PrismaService } from '@app/database/prisma.service';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, Profile } from '@prisma/client';
-import { GetProfileDto } from '../dtos/profile.dto';
+import { GetProfileDto, UpdateProfileDto } from '../dtos/profile.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 
@@ -42,10 +42,7 @@ export class ProfilesService {
       data
     });
   }
-  async update(
-    params: FindByIdDto,
-    data: Prisma.ProfileUpdateInput
-  ): Promise<Profile> {
+  async update(params: FindByIdDto, data: UpdateProfileDto): Promise<Profile> {
     const { id } = params;
     await this.profile({ id });
     return this.prisma.profile.update({
