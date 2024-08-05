@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { Prisma, User } from '@prisma/client';
-import { CreateUserDto, GetUsersDto } from '../dtos/users.dto';
+import { CreateUserDto, GetUsersDto, UpdateUserDto } from '../dtos/users.dto';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
@@ -89,8 +89,9 @@ export class UsersService {
     data: Prisma.UserUpdateInput
   ): Promise<User> {
     const { id } = params;
-
     await this.user({ id });
+    // const { profileId } = data;
+    // await this.profileService.profile({ id: profileId });
 
     return this.prisma.user.update({
       where: { id },
