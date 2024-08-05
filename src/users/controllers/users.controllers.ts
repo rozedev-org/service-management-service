@@ -19,7 +19,7 @@ import { RequirementsByUser, UserEntity } from '../entities/user.entity';
 import { PageDto } from '@common/dtos/page.dto';
 import { JwtAuthGuard } from '@app/auth/guards/jwt-authentication.guard';
 @ApiTags('Users')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
