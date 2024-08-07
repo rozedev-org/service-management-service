@@ -1,6 +1,10 @@
 import { PrismaService } from '@app/database/prisma.service';
 import { FindByIdDto } from '@app/dtos/generic.dto';
-import { getCitiesDto, UpdateCitiesDto } from '@app/locations/dtos/cities.dto';
+import {
+  CreateCitiesDto,
+  getCitiesDto,
+  UpdateCitiesDto
+} from '@app/locations/dtos/cities.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -30,7 +34,7 @@ export class CitiesService {
     return { data, meta: pageMetaDto };
   }
 
-  async create(data: Prisma.CityCreateInput): Promise<City> {
+  async create(data: CreateCitiesDto): Promise<City> {
     return this.prisma.city.create({
       data
     });

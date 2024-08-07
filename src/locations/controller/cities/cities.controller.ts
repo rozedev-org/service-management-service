@@ -41,11 +41,11 @@ export class CitiesController {
     return this.citiesService.cities(queryParams);
   }
 
-  // @Post()
-  // @ApiOkResponse({ type: CityEntity })
-  // async createCity(@Body() payload: CreateCitiesDto): Promise<City> {
-  //   return this.citiesService.create(payload);
-  // }
+  @Post()
+  @ApiOkResponse({ type: CityEntity })
+  async createCity(@Body() payload: CreateCitiesDto): Promise<City> {
+    return this.citiesService.create(payload);
+  }
 
   @Put(':id')
   @ApiOkResponse({ type: CityEntity })

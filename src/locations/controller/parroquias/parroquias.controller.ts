@@ -43,11 +43,11 @@ export class ParroquiasController {
     return this.parroquiasService.parroquias(queryParams);
   }
 
-  // @Post()
-  // @ApiOkResponse({ type: ParroquiaEntity })
-  // async createState(@Body() payload: CreateParroquiaDto): Promise<Parroquia> {
-  //   return this.parroquiasService.create(payload);
-  // }
+  @Post()
+  @ApiOkResponse({ type: ParroquiaEntity })
+  async createState(@Body() payload: CreateParroquiaDto): Promise<Parroquia> {
+    return this.parroquiasService.create(payload);
+  }
 
   @Put(':id')
   @ApiOkResponse({ type: ParroquiaEntity })

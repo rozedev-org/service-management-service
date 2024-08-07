@@ -1,6 +1,7 @@
 import { PrismaService } from '@app/database/prisma.service';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import {
+  CreateParroquiaDto,
   getParroquiaDto,
   UpdateParroquiaDto
 } from '@app/locations/dtos/parroquia.dto';
@@ -33,7 +34,7 @@ export class ParroquiasService {
     return { data, meta: pageMetaDto };
   }
 
-  async create(data: Prisma.ParroquiaCreateInput): Promise<Parroquia> {
+  async create(data: CreateParroquiaDto): Promise<Parroquia> {
     return this.prisma.parroquia.create({
       data
     });
