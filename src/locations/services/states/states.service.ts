@@ -12,7 +12,14 @@ export class StatesService {
 
   async state({ id }: FindByIdDto): Promise<States> {
     const stateData = await this.prisma.states.findUnique({
-      where: { id }
+      where: { id },
+      include: {
+        cities: {
+          include: {
+            parroquias: true
+          }
+        }
+      }
     });
     if (!stateData) {
       throw new NotFoundException(`State ${id} not found`);

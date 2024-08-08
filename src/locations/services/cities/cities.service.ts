@@ -16,7 +16,11 @@ export class CitiesService {
 
   async city({ id }: FindByIdDto): Promise<City> {
     const cityData = await this.prisma.city.findUnique({
-      where: { id }
+      where: { id },
+      include: {
+        State: true,
+        parroquias: true
+      }
     });
     if (!cityData) {
       throw new NotFoundException(`City ${id} not found`);
