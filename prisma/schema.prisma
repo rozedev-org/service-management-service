@@ -90,3 +90,30 @@ model RequirementFieldValue {
   requirement            Requirement          @relation(fields: [requirementId], references: [id], onDelete: Cascade)
   requirementId          Int                  @map("requirement_id")
 }
+
+model States {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  cities    City[]
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  stateId   Int      @map("state_id")
+  State     States   @relation(fields: [stateId], references: [id])
+  Towns     Town[]
+}
+
+model Town {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  cityId    Int      @map("city_id")
+  city      City     @relation(fields: [cityId], references: [id])
+}
