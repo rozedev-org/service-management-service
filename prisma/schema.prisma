@@ -100,16 +100,16 @@ model States {
 }
 
 model City {
-  id         Int         @id @default(autoincrement())
-  name       String
-  createdAt  DateTime    @default(now()) @map("created_at")
-  updatedAt  DateTime    @updatedAt @map("updated_at")
-  stateId    Int         @map("state_id")
-  State      States      @relation(fields: [stateId], references: [id])
-  parroquias Parroquia[]
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  stateId   Int      @map("state_id")
+  State     States   @relation(fields: [stateId], references: [id])
+  Towns     Town[]
 }
 
-model Parroquia {
+model Town {
   id        Int      @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now()) @map("created_at")

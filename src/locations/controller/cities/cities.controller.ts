@@ -25,7 +25,7 @@ import { City } from '@prisma/client';
 
 @ApiTags('Cities')
 @UseGuards(JwtAuthGuard)
-@Controller('cities')
+@Controller('locations/city')
 export class CitiesController {
   constructor(private readonly citiesService: CitiesService) {}
 

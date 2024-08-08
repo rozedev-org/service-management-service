@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Parroquia } from '@prisma/client';
+import { Town } from '@prisma/client';
 
-export class ParroquiaEntity implements Parroquia {
+export class TownEntity implements Town {
   @ApiProperty()
   id: number;
   @ApiProperty()

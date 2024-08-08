@@ -16,7 +16,7 @@ export class StatesService {
       include: {
         cities: {
           include: {
-            parroquias: true
+            Towns: true
           }
         }
       }

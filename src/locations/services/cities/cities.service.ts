@@ -8,7 +8,7 @@ import {
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { City, Prisma } from '@prisma/client';
+import { City } from '@prisma/client';
 
 @Injectable()
 export class CitiesService {
@@ -19,7 +19,7 @@ export class CitiesService {
       where: { id },
       include: {
         State: true,
-        parroquias: true
+        Towns: true
       }
     });
     if (!cityData) {

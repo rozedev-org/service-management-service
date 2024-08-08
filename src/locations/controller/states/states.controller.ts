@@ -25,7 +25,7 @@ import { States } from '@prisma/client';
 
 @ApiTags('States')
 @UseGuards(JwtAuthGuard)
-@Controller('states')
+@Controller('locations/state')
 export class StatesController {
   constructor(private readonly statesService: StatesService) {}
 

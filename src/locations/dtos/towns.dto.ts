@@ -2,9 +2,9 @@ import { PageOptionsDto } from '@common/dtos/page.dto';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
 
-export class getParroquiaDto extends PageOptionsDto {}
+export class getTownDto extends PageOptionsDto {}
 
-export class CreateParroquiaDto {
+export class CreateTownDto {
   @ApiProperty()
   @IsString()
   name: string;
@@ -13,4 +13,4 @@ export class CreateParroquiaDto {
   cityId: number;
 }
 
-export class UpdateParroquiaDto extends PartialType(CreateParroquiaDto) {}
+export class UpdateTownDto extends PartialType(CreateTownDto) {}
