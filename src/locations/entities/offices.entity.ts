@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { State } from '@prisma/client';
+import { Office } from '@prisma/client';
 
-export class StateEntity implements State {
+export class OfficeEntity implements Office {
   @ApiProperty()
   id: number;
   @ApiProperty()
@@ -10,4 +10,6 @@ export class StateEntity implements State {
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;
+  @ApiProperty()
+  townId: number;
 }

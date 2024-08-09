@@ -4,19 +4,19 @@ import { getStatesDto, UpdateStatesDto } from '@app/locations/dtos/states.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma, States } from '@prisma/client';
+import { Prisma, State } from '@prisma/client';
 
 @Injectable()
 export class StatesService {
   constructor(private prisma: PrismaService) {}
 
-  async state({ id }: FindByIdDto): Promise<States> {
-    const stateData = await this.prisma.states.findUnique({
+  async state({ id }: FindByIdDto): Promise<State> {
+    const stateData = await this.prisma.state.findUnique({
       where: { id },
       include: {
         cities: {
           include: {
-            Towns: true
+            towns: true
           }
         }
       }
@@ -26,10 +26,10 @@ export class StatesService {
     }
     return stateData;
   }
-  async states(params: getStatesDto): Promise<PageDto<States>> {
+  async states(params: getStatesDto): Promise<PageDto<State>> {
     const { skip, take } = params;
-    const itemCount = await this.prisma.states.count();
-    const data = await this.prisma.states.findMany({ skip, take });
+    const itemCount = await this.prisma.state.count();
+    const data = await this.prisma.state.findMany({ skip, take });
     const pageMetaDto = new PageMetaDto({
       itemCount,
       pageOptionsDto: params
@@ -37,22 +37,22 @@ export class StatesService {
     return { data, meta: pageMetaDto };
   }
 
-  async create(data: Prisma.StatesCreateInput): Promise<States> {
-    return this.prisma.states.create({
+  async create(data: Prisma.StateCreateInput): Promise<State> {
+    return this.prisma.state.create({
       data
     });
   }
-  async update(params: FindByIdDto, data: UpdateStatesDto): Promise<States> {
+  async update(params: FindByIdDto, data: UpdateStatesDto): Promise<State> {
     const { id } = params;
     await this.state({ id });
-    return this.prisma.states.update({
+    return this.prisma.state.update({
       where: { id },
       data
     });
   }
-  async remove({ id }: FindByIdDto): Promise<States> {
+  async remove({ id }: FindByIdDto): Promise<State> {
     await this.state({ id });
-    return this.prisma.states.delete({
+    return this.prisma.state.delete({
       where: { id }
     });
   }

@@ -18,8 +18,8 @@ export class CitiesService {
     const cityData = await this.prisma.city.findUnique({
       where: { id },
       include: {
-        State: true,
-        Towns: true
+        state: true,
+        towns: true
       }
     });
     if (!cityData) {

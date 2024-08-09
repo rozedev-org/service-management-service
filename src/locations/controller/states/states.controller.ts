@@ -21,7 +21,7 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { States } from '@prisma/client';
+import { State } from '@prisma/client';
 
 @ApiTags('States')
 @UseGuards(JwtAuthGuard)
@@ -31,21 +31,19 @@ export class StatesController {
 
   @Get(':id')
   @ApiOkResponse({ type: StateEntity })
-  getState(@Param() params: FindByIdDto): Promise<States> {
+  getState(@Param() params: FindByIdDto): Promise<State> {
     return this.statesService.state(params);
   }
 
   @Get()
   @ApiPaginatedResponse(StateEntity)
-  async getStates(
-    @Query() queryParams: getStatesDto
-  ): Promise<PageDto<States>> {
+  async getStates(@Query() queryParams: getStatesDto): Promise<PageDto<State>> {
     return this.statesService.states(queryParams);
   }
 
   @Post()
   @ApiOkResponse({ type: StateEntity })
-  async createState(@Body() payload: CreateStateDto): Promise<States> {
+  async createState(@Body() payload: CreateStateDto): Promise<State> {
     return this.statesService.create(payload);
   }
 

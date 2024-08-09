@@ -91,7 +91,7 @@ model RequirementFieldValue {
   requirementId          Int                  @map("requirement_id")
 }
 
-model States {
+model State {
   id        Int      @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now()) @map("created_at")
@@ -105,8 +105,8 @@ model City {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   stateId   Int      @map("state_id")
-  State     States   @relation(fields: [stateId], references: [id])
-  Towns     Town[]
+  state     State    @relation(fields: [stateId], references: [id])
+  towns     Town[]
 }
 
 model Town {
@@ -116,4 +116,14 @@ model Town {
   updatedAt DateTime @updatedAt @map("updated_at")
   cityId    Int      @map("city_id")
   city      City     @relation(fields: [cityId], references: [id])
+  offices   Office[]
+}
+
+model Office {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  townId    Int      @map("town_id")
+  town      Town     @relation(fields: [townId], references: [id])
 }

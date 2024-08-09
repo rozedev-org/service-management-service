@@ -6,10 +6,17 @@ import { StatesService } from './services/states/states.service';
 import { CitiesService } from './services/cities/cities.service';
 import { TownsService } from './services/towns/towns.service';
 import { TownsController } from './controller/towns/parroquias.controller';
+import { OfficesController } from './controller/offices/offices.controller';
+import { OfficesService } from './services/offices/offices.service';
 
 @Module({
   imports: [PrismaModule],
-  controllers: [StatesController, CitiesController, TownsController],
-  providers: [StatesService, CitiesService, TownsService]
+  controllers: [
+    StatesController,
+    CitiesController,
+    TownsController,
+    OfficesController
+  ],
+  providers: [StatesService, CitiesService, TownsService, OfficesService]
 })
 export class LocationsModule {}
