@@ -17,6 +17,10 @@ export class CreateReqTypeFieldDto {
   @ApiProperty()
   @IsNumber()
   order: number;
+
+  @ApiProperty()
+  @IsOptional()
+  options: any;
 }
 
 export class UpdateReqTypeFieldDto extends PartialType(CreateReqTypeFieldDto) {

@@ -35,6 +35,11 @@ export class ReqTypeFieldService {
    * @returns A promise that resolves to the created requirement type fields.
    */
   async create(payload: CreateReqTypeFieldDto[]) {
+    console.log('payload :>> ', payload[payload.length - 1]);
+    payload.forEach((field) => {
+      field.options = field.options ? JSON.stringify(field.options) : [];
+    });
+
     return await this.prisma.requirementTypeField.createMany({ data: payload });
   }
 
