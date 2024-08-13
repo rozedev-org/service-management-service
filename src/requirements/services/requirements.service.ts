@@ -67,7 +67,6 @@ export class RequirementsService {
 
   async create(data: CreateRequirementsDto): Promise<Requirement> {
     data.userId && (await this.userService.user({ id: data.userId }));
-
     const newRequirement = await this.prisma.requirement.create({
       data: {
         stateId: data.stateId,
@@ -80,7 +79,6 @@ export class RequirementsService {
       ...fieldValue,
       requirementId: newRequirement.id
     }));
-
     await this.prisma.requirementFieldValue.createMany({
       data: reqFieldValue
     });
@@ -88,6 +86,19 @@ export class RequirementsService {
     // return this.prisma.requirement.create({
     //   data
     // });
+    const requiredFieldErrors = requirement.requirementFieldValue
+      .filter((fieldValue) => !fieldValue.requirementTypeField.isOptional)
+      .map((fieldValue) => {
+        if (!fieldValue.value) {
+          return `Required field ${fieldValue.requirementTypeField.title} is missing a value.`;
+        }
+        return null;
+      })
+      .filter((error) => error !== null);
+
+    if (requiredFieldErrors.length > 0) {
+      throw new Error(requiredFieldErrors.join(' '));
+    }
     return requirement;
   }
 

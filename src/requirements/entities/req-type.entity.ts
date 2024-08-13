@@ -14,6 +14,7 @@ export class ReqTypeFieldEntity implements RequirementTypeField {
   @ApiProperty()
   order: number;
   @ApiProperty()
+  isOptional: boolean;
   options: any;
 }
 
