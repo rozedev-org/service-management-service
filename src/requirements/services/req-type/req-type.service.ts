@@ -113,7 +113,7 @@ export class ReqTypeService {
         title: r.title,
         type: r.type,
         order: r.order,
-        isOptional: r.isOptional
+        isOptional: r.isOptional,
         options: r.options
       }));
 
