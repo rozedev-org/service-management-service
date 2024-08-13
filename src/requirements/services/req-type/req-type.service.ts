@@ -84,7 +84,8 @@ export class ReqTypeService {
         requirementTypeId: reqType.id,
         title: r.title,
         type: r.type,
-        order: r.order
+        order: r.order,
+        isOptional: r.isOptional
       }));
     const reqTypeFields =
       await this.reqTypeFieldService.create(reqTypeFieldsPaylod);

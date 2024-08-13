@@ -80,6 +80,7 @@ model RequirementTypeField {
   requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id], onDelete: Cascade)
   requirementTypeId     Int                     @map("requirement_type_id")
   RequirementFieldValue RequirementFieldValue[]
+  isOptional            Boolean                 @default(true) @map("is_optional")
 }
 
 model RequirementFieldValue {
