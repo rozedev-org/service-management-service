@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RequirementType, RequirementTypeField } from '@prisma/client';
+import { JsonValue } from '@prisma/client/runtime/library';
 
 export class ReqTypeFieldEntity implements RequirementTypeField {
   @ApiProperty()
@@ -10,9 +11,10 @@ export class ReqTypeFieldEntity implements RequirementTypeField {
   type: string;
   @ApiProperty()
   requirementTypeId: number;
-
   @ApiProperty()
   order: number;
+  @ApiProperty()
+  options: any;
 }
 
 export class ReqTypeEntity implements RequirementType {

@@ -77,6 +77,7 @@ model RequirementTypeField {
   title                 String
   type                  String
   order                 Int                     @default(0)
+  options               Json?                   @default("[]")
   requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id], onDelete: Cascade)
   requirementTypeId     Int                     @map("requirement_type_id")
   RequirementFieldValue RequirementFieldValue[]
