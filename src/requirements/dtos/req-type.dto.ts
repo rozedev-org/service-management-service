@@ -5,6 +5,7 @@ import {
   IsArray,
   IsBoolean,
   IsNumber,
+  IsOptional,
   IsString,
   ValidateNested
 } from 'class-validator';
@@ -27,6 +28,11 @@ class CreateReqTypeFieldDto {
   @ApiProperty()
   @IsBoolean()
   isOptional: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  options: any;
+
 }
 
 export class CreateReqTypeDto {

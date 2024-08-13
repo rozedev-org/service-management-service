@@ -10,7 +10,11 @@ import { PageDto } from '@common/dtos/page.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReqTypeFieldService } from './req-type-field.service';
 import { CreateReqTypeFieldDto } from '@app/requirements/dtos/req-type-field.dto';
-import { ReqTypeEntity } from '@app/requirements/entities/req-type.entity';
+import {
+  ReqTypeEntity,
+  ReqTypeFieldEntity
+} from '@app/requirements/entities/req-type.entity';
+import { JsonValue } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ReqTypeService {
@@ -25,7 +29,7 @@ export class ReqTypeService {
    * @returns A Promise that resolves to the requirement type.
    * @throws NotFoundException if the requirement type with the specified ID is not found.
    */
-  async reqType({ id }: FindByIdDto): Promise<ReqTypeEntity> {
+  async reqType({ id }: FindByIdDto) {
     const reqTypeData = await this.prisma.requirementType.findUnique({
       where: { id },
       include: {
@@ -34,10 +38,34 @@ export class ReqTypeService {
         }
       }
     });
+
     if (!reqTypeData) {
       throw new NotFoundException(`Requirement type ${id} not found`);
     }
-    return reqTypeData;
+
+    const formatedReqType = new ReqTypeEntity();
+    formatedReqType.id = reqTypeData.id;
+    formatedReqType.name = reqTypeData.name;
+    formatedReqType.requirementTypeField = [];
+
+    for await (const field of reqTypeData.requirementTypeField) {
+      const formatedField = new ReqTypeFieldEntity();
+      formatedField.id = field.id;
+      formatedField.title = field.title;
+      formatedField.type = field.type;
+      formatedField.requirementTypeId = field.requirementTypeId;
+      formatedField.order = field.order;
+
+      if (field.type === 'user') {
+        formatedField.options = await this.prisma.user.findMany();
+      } else if (field.type === 'list') {
+        formatedField.options = JSON.parse(field.options as string);
+      }
+
+      formatedReqType.requirementTypeField.push(formatedField);
+    }
+
+    return formatedReqType;
   }
 
   /**
@@ -86,10 +114,10 @@ export class ReqTypeService {
         type: r.type,
         order: r.order,
         isOptional: r.isOptional
+        options: r.options
       }));
-    const reqTypeFields =
-      await this.reqTypeFieldService.create(reqTypeFieldsPaylod);
-    console.log(reqTypeFields);
+
+    await this.reqTypeFieldService.create(reqTypeFieldsPaylod);
     return await this.reqType({ id: reqType.id });
   }
 

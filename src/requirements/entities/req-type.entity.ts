@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RequirementType, RequirementTypeField } from '@prisma/client';
+import { JsonValue } from '@prisma/client/runtime/library';
 
 export class ReqTypeFieldEntity implements RequirementTypeField {
   @ApiProperty()
@@ -14,6 +15,7 @@ export class ReqTypeFieldEntity implements RequirementTypeField {
   order: number;
   @ApiProperty()
   isOptional: boolean;
+  options: any;
 }
 
 export class ReqTypeEntity implements RequirementType {
