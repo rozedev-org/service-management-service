@@ -28,9 +28,12 @@ export class CreateReqTypeFieldDto {
   @IsBoolean()
   isOptional: boolean;
 
+  @ApiProperty()
+  @IsBoolean()
+  isRequired: boolean;
+
   @IsOptional()
   options: any;
-
 }
 
 export class UpdateReqTypeFieldDto extends PartialType(CreateReqTypeFieldDto) {

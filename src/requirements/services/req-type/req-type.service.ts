@@ -55,6 +55,8 @@ export class ReqTypeService {
       formatedField.type = field.type;
       formatedField.requirementTypeId = field.requirementTypeId;
       formatedField.order = field.order;
+      formatedField.isOptional = field.isOptional;
+      formatedField.isRequired = field.isRequired;
 
       if (field.type === 'user') {
         formatedField.options = await this.prisma.user.findMany();
@@ -114,7 +116,8 @@ export class ReqTypeService {
         type: r.type,
         order: r.order,
         isOptional: r.isOptional,
-        options: r.options
+        options: r.options,
+        isRequired: r.isRequired
       }));
 
     await this.reqTypeFieldService.create(reqTypeFieldsPaylod);
