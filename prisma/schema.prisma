@@ -82,6 +82,7 @@ model RequirementTypeField {
   requirementTypeId     Int                     @map("requirement_type_id")
   RequirementFieldValue RequirementFieldValue[]
   isOptional            Boolean                 @default(true) @map("is_optional")
+  isRequired            Boolean                 @default(false) @map("is_required")
 }
 
 model RequirementFieldValue {

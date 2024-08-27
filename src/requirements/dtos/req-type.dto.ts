@@ -30,9 +30,12 @@ class CreateReqTypeFieldDto {
   isOptional: boolean;
 
   @ApiProperty()
+  @IsBoolean()
+  isRequired: boolean;
+
+  @ApiProperty()
   @IsOptional()
   options: any;
-
 }
 
 export class CreateReqTypeDto {
