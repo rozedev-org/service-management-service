@@ -12,4 +12,6 @@ export class ReqAuditEntity implements RequirementsAudit {
   oldStateId: number;
   @ApiProperty()
   userId: number;
+  @ApiProperty()
+  requirementId: number;
 }

@@ -95,11 +95,12 @@ model RequirementFieldValue {
 }
 
 model RequirementsAudit {
-  id         Int      @id @default(autoincrement())
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  newStateId Int      @map("new_state_id")
-  oldStateId Int      @map("old_state_id")
-  userId     Int      @map("user_id")
+  id            Int      @id @default(autoincrement())
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  newStateId    Int      @map("new_state_id")
+  oldStateId    Int      @map("old_state_id")
+  userId        Int      @map("user_id")
+  requirementId Int      @default(0) @map("requirement_id")
 }
 
 model State {

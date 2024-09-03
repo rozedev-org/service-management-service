@@ -13,4 +13,7 @@ export class CreateAuditDto {
   @ApiProperty()
   @IsNumber()
   userId: number;
+  @ApiProperty()
+  @IsNumber()
+  requirementId: number;
 }

@@ -117,7 +117,8 @@ export class RequirementsService {
     const auditReqData = {
       oldStateId: ReqData.stateId,
       newStateId: data.stateId,
-      userId: data.userId
+      userId: data.userId,
+      requirementId: id
     };
     await this.prisma.requirement.update({
       where: { id },
