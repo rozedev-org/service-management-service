@@ -14,13 +14,14 @@ import {
   ReqActionsEntity,
   RequirementEntity
 } from '../entities/requirements.entity';
-import { use } from 'passport';
+import { AuditService } from './audit/audit.service';
 
 @Injectable()
 export class RequirementsService {
   constructor(
     private prisma: PrismaService,
-    private userService: UsersService
+    private userService: UsersService,
+    private auditService: AuditService
   ) {}
 
   async requirement({ id }: FindByIdDto): Promise<RequirementEntity> {
@@ -104,7 +105,7 @@ export class RequirementsService {
 
   async update(params: FindByIdDto, data: UpdateRequirementsDto) {
     const { id } = params;
-
+    const ReqData = await this.requirement({ id });
     data.userId && (await this.userService.user({ id: data.userId }));
 
     await this.requirement({ id });
@@ -113,11 +114,19 @@ export class RequirementsService {
       stateId: data.stateId,
       userId: data.userId
     };
-
+    const auditReqData = {
+      oldStateId: ReqData.stateId,
+      newStateId: data.stateId,
+      userId: data.userId
+    };
     await this.prisma.requirement.update({
       where: { id },
       data: newRequirementData
     });
+
+    if (data.stateId !== ReqData.stateId) {
+      await this.auditService.create(auditReqData);
+    }
 
     if (data.requirementFieldValue) {
       for await (const fieldValue of data.requirementFieldValue) {
