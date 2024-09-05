@@ -12,6 +12,10 @@ export class CreateReqStateDto {
   @ApiProperty()
   @IsNumber()
   secuence: number;
+
+  @ApiProperty()
+  @IsString()
+  stateType: string;
 }
 
 export class UpdateReqStateDto extends PartialType(CreateReqStateDto) {}
