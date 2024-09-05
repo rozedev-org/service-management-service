@@ -12,4 +12,6 @@ export class ReqStateEntity implements RequirementState {
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;
+  @ApiProperty()
+  stateType: string;
 }

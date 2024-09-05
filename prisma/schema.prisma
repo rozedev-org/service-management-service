@@ -63,6 +63,7 @@ model RequirementState {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   requirement Requirement[]
+  stateType   String        @map("state_type")
 }
 
 model RequirementType {
