@@ -14,7 +14,6 @@ import {
   ReqTypeEntity,
   ReqTypeFieldEntity
 } from '@app/requirements/entities/req-type.entity';
-import { JsonValue } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ReqTypeService {
@@ -60,6 +59,9 @@ export class ReqTypeService {
 
       if (field.type === 'user') {
         formatedField.options = await this.prisma.user.findMany();
+      }
+      if (field.type === 'customer') {
+        formatedField.options = await this.prisma.customer.findMany();
       } else if (field.type === 'list') {
         formatedField.options = JSON.parse(field.options as string);
       }
@@ -88,13 +90,46 @@ export class ReqTypeService {
       skip,
       take
     });
+
+    const formatedData = [];
+
+    for await (const reqType of data) {
+      const formatedReqTypeField = [];
+      for await (const requirementTypeField of reqType.requirementTypeField) {
+        const formatedField = new ReqTypeFieldEntity();
+        formatedField.id = requirementTypeField.id;
+        formatedField.title = requirementTypeField.title;
+        formatedField.type = requirementTypeField.type;
+        formatedField.requirementTypeId =
+          requirementTypeField.requirementTypeId;
+        formatedField.order = requirementTypeField.order;
+        formatedField.isOptional = requirementTypeField.isOptional;
+        formatedField.isRequired = requirementTypeField.isRequired;
+        if (requirementTypeField.type === 'user') {
+          formatedField.options = await this.prisma.user.findMany();
+        }
+        if (requirementTypeField.type === 'customer') {
+          formatedField.options = await this.prisma.customer.findMany();
+        } else if (requirementTypeField.type === 'list') {
+          formatedField.options = JSON.parse(
+            requirementTypeField.options as string
+          );
+        }
+        formatedReqTypeField.push(formatedField);
+      }
+      formatedData.push({
+        ...reqType,
+        requirementTypeField: formatedReqTypeField
+      });
+    }
+
     const pageMetaDto = new PageMetaDto({
       itemCount,
       pageOptionsDto: params
     });
 
     return {
-      data,
+      data: formatedData,
       meta: pageMetaDto
     };
   }

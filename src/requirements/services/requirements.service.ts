@@ -84,9 +84,7 @@ export class RequirementsService {
       data: reqFieldValue
     });
     const requirement = await this.requirement({ id: newRequirement.id });
-    // return this.prisma.requirement.create({
-    //   data
-    // });
+
     const requiredFieldErrors = requirement.requirementFieldValue
       .filter((fieldValue) => !fieldValue.requirementTypeField.isOptional)
       .map((fieldValue) => {
