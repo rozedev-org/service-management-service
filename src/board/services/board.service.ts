@@ -10,7 +10,8 @@ export class BoardService {
       include: {
         requirement: {
           include: {
-            user: true
+            user: true,
+            requirementType: true
           }
         }
       },

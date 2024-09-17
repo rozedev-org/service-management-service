@@ -22,6 +22,25 @@ model User {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   requirement Requirement[]
+  isEnabled   Boolean       @default(true) @map("is_enabled")
+  loginTries  Int           @default(0) @map("login_tries")
+  profileId   Int           @map("profile_id")
+  profile     Profile       @relation(fields: [profileId], references: [id])
+}
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  name      String   @map("name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  User      User[]
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model Requirement {
@@ -30,7 +49,6 @@ model Requirement {
   userId                Int?                    @map("user_id")
   state                 RequirementState        @relation(fields: [stateId], references: [id])
   stateId               Int                     @map("state_id")
-  title                 String                  @default("")
   createdAt             DateTime                @default(now()) @map("created_at")
   updatedAt             DateTime                @updatedAt @map("updated_at")
   requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id])
@@ -45,6 +63,7 @@ model RequirementState {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   requirement Requirement[]
+  stateType   String        @map("state_type")
 }
 
 model RequirementType {
@@ -59,9 +78,12 @@ model RequirementTypeField {
   title                 String
   type                  String
   order                 Int                     @default(0)
+  options               Json?                   @default("[]")
   requirementType       RequirementType         @relation(fields: [requirementTypeId], references: [id], onDelete: Cascade)
   requirementTypeId     Int                     @map("requirement_type_id")
   RequirementFieldValue RequirementFieldValue[]
+  isOptional            Boolean                 @default(true) @map("is_optional")
+  isRequired            Boolean                 @default(false) @map("is_required")
 }
 
 model RequirementFieldValue {
@@ -71,4 +93,50 @@ model RequirementFieldValue {
   requirementTypeFieldId Int                  @map("requirement_field_id")
   requirement            Requirement          @relation(fields: [requirementId], references: [id], onDelete: Cascade)
   requirementId          Int                  @map("requirement_id")
+}
+
+model RequirementsAudit {
+  id            Int      @id @default(autoincrement())
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  newStateId    Int      @map("new_state_id")
+  oldStateId    Int      @map("old_state_id")
+  userId        Int      @map("user_id")
+  requirementId Int      @default(0) @map("requirement_id")
+}
+
+model State {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  cities    City[]
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  stateId   Int      @map("state_id")
+  state     State    @relation(fields: [stateId], references: [id])
+  towns     Town[]
+}
+
+model Town {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  cityId    Int      @map("city_id")
+  city      City     @relation(fields: [cityId], references: [id])
+  offices   Office[]
+}
+
+model Office {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  townId    Int      @map("town_id")
+  town      Town     @relation(fields: [townId], references: [id])
 }

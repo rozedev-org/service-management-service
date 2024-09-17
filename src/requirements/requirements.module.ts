@@ -8,16 +8,26 @@ import { ReqStateService } from './services/req-state/req-state.service';
 import { ReqTypeService } from './services/req-type/req-type.service';
 import { ReqTypeFieldService } from './services/req-type/req-type-field.service';
 import { ReqTypeController } from './controllers/type/req-type.controller';
+import { ProfilesService } from '@app/users/services/profiles.service';
+import { AuditController } from './controllers/audit/audit.controller';
+import { AuditService } from './services/audit/audit.service';
 
 @Module({
   imports: [PrismaModule],
   providers: [
     RequirementsService,
     UsersService,
+    ProfilesService,
     ReqStateService,
     ReqTypeService,
-    ReqTypeFieldService
+    ReqTypeFieldService,
+    AuditService
   ],
-  controllers: [ReqTypeController, ReqStateController, RequirementsController]
+  controllers: [
+    ReqTypeController,
+    ReqStateController,
+    RequirementsController,
+    AuditController
+  ]
 })
 export class RequirementsModule {}

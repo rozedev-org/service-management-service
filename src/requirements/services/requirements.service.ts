@@ -14,13 +14,14 @@ import {
   ReqActionsEntity,
   RequirementEntity
 } from '../entities/requirements.entity';
-import { use } from 'passport';
+import { AuditService } from './audit/audit.service';
 
 @Injectable()
 export class RequirementsService {
   constructor(
     private prisma: PrismaService,
-    private userService: UsersService
+    private userService: UsersService,
+    private auditService: AuditService
   ) {}
 
   async requirement({ id }: FindByIdDto): Promise<RequirementEntity> {
@@ -67,10 +68,8 @@ export class RequirementsService {
 
   async create(data: CreateRequirementsDto): Promise<Requirement> {
     data.userId && (await this.userService.user({ id: data.userId }));
-
     const newRequirement = await this.prisma.requirement.create({
       data: {
-        title: data.title,
         stateId: data.stateId,
         requirementTypeId: data.requirementTypeId,
         userId: data.userId
@@ -81,34 +80,52 @@ export class RequirementsService {
       ...fieldValue,
       requirementId: newRequirement.id
     }));
-
     await this.prisma.requirementFieldValue.createMany({
       data: reqFieldValue
     });
     const requirement = await this.requirement({ id: newRequirement.id });
-    // return this.prisma.requirement.create({
-    //   data
-    // });
+
+    const requiredFieldErrors = requirement.requirementFieldValue
+      .filter((fieldValue) => !fieldValue.requirementTypeField.isOptional)
+      .map((fieldValue) => {
+        if (!fieldValue.value) {
+          return `Required field ${fieldValue.requirementTypeField.title} is missing a value.`;
+        }
+        return null;
+      })
+      .filter((error) => error !== null);
+
+    if (requiredFieldErrors.length > 0) {
+      throw new Error(requiredFieldErrors.join(' '));
+    }
     return requirement;
   }
 
   async update(params: FindByIdDto, data: UpdateRequirementsDto) {
     const { id } = params;
-
+    const ReqData = await this.requirement({ id });
     data.userId && (await this.userService.user({ id: data.userId }));
 
     await this.requirement({ id });
 
     const newRequirementData = {
-      title: data.title,
       stateId: data.stateId,
       userId: data.userId
     };
-
+    const auditReqData = {
+      oldStateId: ReqData.stateId,
+      newStateId: data.stateId,
+      userId: data.userId,
+      requirementId: id
+    };
     await this.prisma.requirement.update({
       where: { id },
       data: newRequirementData
     });
+
+    if (data.stateId !== ReqData.stateId) {
+      await this.auditService.create(auditReqData);
+    }
 
     if (data.requirementFieldValue) {
       for await (const fieldValue of data.requirementFieldValue) {

@@ -5,16 +5,20 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { Prisma, User } from '@prisma/client';
-import { GetUsersDto } from '../dtos/users.dto';
+import { CreateUserDto, GetUsersDto, UpdateUserDto } from '../dtos/users.dto';
 import { FindByIdDto } from '@app/dtos/generic.dto';
 import { PageMetaDto } from '@common/dtos/page-meta.dto';
 import { PageDto } from '@common/dtos/page.dto';
 import * as bcrypt from 'bcrypt';
 import { RequirementsByUser } from '../entities/user.entity';
+import { ProfilesService } from './profiles.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private profileService: ProfilesService
+  ) {}
 
   async findUsername(userName: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
@@ -57,7 +61,9 @@ export class UsersService {
     };
   }
 
-  async create(data: Prisma.UserCreateInput): Promise<User> {
+  async create(data: CreateUserDto): Promise<User> {
+    const { profileId } = data;
+
     const userExists = await this.prisma.user.findUnique({
       where: { userName: data.userName }
     });
@@ -65,6 +71,8 @@ export class UsersService {
     if (userExists) {
       throw new BadRequestException(`User ${data.userName} already exists`);
     }
+
+    await this.profileService.profile({ id: profileId });
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
@@ -81,8 +89,9 @@ export class UsersService {
     data: Prisma.UserUpdateInput
   ): Promise<User> {
     const { id } = params;
-
     await this.user({ id });
+    // const { profileId } = data;
+    // await this.profileService.profile({ id: profileId });
 
     return this.prisma.user.update({
       where: { id },
