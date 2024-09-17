@@ -68,9 +68,14 @@ export class RequirementsService {
 
   async create(data: CreateRequirementsDto): Promise<Requirement> {
     data.userId && (await this.userService.user({ id: data.userId }));
+
+    const reqState = await this.prisma.requirementState.findFirst({
+      where: { secuence: 1 }
+    });
+
     const newRequirement = await this.prisma.requirement.create({
       data: {
-        stateId: data.stateId,
+        stateId: reqState.id,
         requirementTypeId: data.requirementTypeId,
         userId: data.userId
       }
