@@ -8,7 +8,7 @@ data:
   DATABASE_URL: "postgresql://postgresadmin:t&+rl-aTM301@postgres:5432/service_management_db?schema=public"
   JWT_EXPIRATION_TIME: '86400'
   JWT_SECRET: 'secret'
-  DEFAULT_ADMIN_PASSWORD: '4Dm!n20301407'
+  DEFAULT_ADMIN_PASSWORD: '$2b$10$IZxFqCmmA/mi5DK.aPgEnOTlySf9MWZS8LMR/eC9tlN7TJdt4wqdG'
   ENVIRONMENT: 'PRD'
 
 
