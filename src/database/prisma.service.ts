@@ -45,7 +45,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       const adminUser = await this.user.create({
         data: {
           userName: 'admin',
-          password: process.env.DEFAULT_ADMIN_PASS || 'admin',
+          password: process.env.DEFAULT_ADMIN_PASSWORD || 'admin',
           lastName: 'Admin',
           firstName: 'Admin',
           profileId: defaultProfile.id
