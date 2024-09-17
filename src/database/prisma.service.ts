@@ -17,19 +17,41 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     //   });
     // }
 
-    // const defaultUser = await this.user.findUnique({
-    //   where: { userName: 'admin' }
-    // });
-    // if (!defaultUser) {
-    //   const adminUser = await this.user.create({
-    //     data: {
-    //       userName: 'admin',
-    //       password: process.env.DEFAULT_ADMIN_PASS || 'admin',
-    //       lastName: 'Admin',
-    //       firstName: 'Admin'
-    //     }
-    //   });
-    //   console.log(adminUser);
-    // }
+    let defaultProfile = await this.profile.findFirst({
+      where: {
+        name: 'Admin'
+      }
+    });
+
+    if (!defaultProfile) {
+      await this.profile.create({
+        data: {
+          name: 'Admin'
+        }
+      });
+    }
+
+    defaultProfile = await this.profile.findFirst({
+      where: {
+        name: 'Admin'
+      }
+    });
+
+    const defaultUser = await this.user.findUnique({
+      where: { userName: 'admin' }
+    });
+
+    if (!defaultUser) {
+      const adminUser = await this.user.create({
+        data: {
+          userName: 'admin',
+          password: process.env.DEFAULT_ADMIN_PASS || 'admin',
+          lastName: 'Admin',
+          firstName: 'Admin',
+          profileId: defaultProfile.id
+        }
+      });
+      console.log(adminUser);
+    }
   }
 }
